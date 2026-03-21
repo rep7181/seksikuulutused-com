@@ -117,7 +117,7 @@ function buildAdPage(ad, relatedAds) {
         '.item-who{font-weight:700;font-size:14px}\n' +
         '.item-time{font-size:11px;color:#bdc3c7}\n' +
         '.item-meta{font-size:12px;color:#95a5a6;margin-bottom:6px}\n' +
-        '.item-img{width:100%;max-height:400px;object-fit:cover;border-radius:2px;margin-bottom:8px}\n' +
+        '.item-img{max-width:300px;max-height:300px;object-fit:cover;border-radius:6px;margin-bottom:10px;display:block}\n' +
         '.item-desc{font-size:13px;color:#555;line-height:1.5;margin-bottom:8px;word-wrap:break-word;overflow-wrap:break-word}\n' +
         '.item-bottom{display:flex;align-items:center;gap:6px;flex-wrap:wrap}\n' +
         '.wa-tag{display:inline-flex;align-items:center;gap:4px;background:#e8f5e9;color:#27ae60;padding:3px 10px;border-radius:2px;font-size:12px;font-weight:700;border:1px solid #c8e6c9;cursor:pointer;transition:filter .3s}\n' +
@@ -195,8 +195,12 @@ function buildAdPage(ad, relatedAds) {
 
         '<nav class="site-nav"><div class="wrap"><ul>' +
         '<li><a href="/">Kuulutused</a></li>' +
+        '<li><a href="/mees-otsib-seksi.html">Mees otsib seksi</a></li>' +
+        '<li><a href="/naine-pakub-seksi.html">Naine pakub seksi</a></li>' +
+        '<li><a href="/mehed-omavahel.html">Mehed omavahel</a></li>' +
+        '<li><a href="/naised-omavahel.html">Naised omavahel</a></li>' +
+        '<li><a href="/massaaz.html">Massaa\u017e</a></li>' +
         '<li><a href="/lisa-kuulutus.html">Lisa kuulutus</a></li>' +
-        '<li><a href="/privaatsus.html">Privaatsus</a></li>' +
         '</ul></div></nav>\n' +
 
         '<div class="wrap">\n' +
@@ -218,6 +222,11 @@ function buildAdPage(ad, relatedAds) {
         '<span class="type-tag">' + typeLabel + '</span>' +
         '<span class="views-tag">&#128065; ' + (ad.views || 0) + '</span>' +
         '</div></div>\n' +
+
+        '<div class="vote-bar" style="display:flex;gap:10px;margin:12px 0;align-items:center">' +
+        '<button class="vote-btn like-btn" id="likeBtn" onclick="vote(\'like\')" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:3px;border:1px solid #ddd;background:#fff;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;color:#27ae60">&#128077; Meeldib <span id="likeCnt">' + (ad.likes || 0) + '</span></button>' +
+        '<button class="vote-btn dislike-btn" id="dislikeBtn" onclick="vote(\'dislike\')" style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:3px;border:1px solid #ddd;background:#fff;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700;color:#e74c3c">&#128078; Ei meeldi <span id="dislikeCnt">' + (ad.dislikes || 0) + '</span></button>' +
+        '</div>\n' +
 
         '<div class="share-bar">' +
         '<button class="share-btn share-copy" onclick="copyLink()">&#128203; Kopeeri link</button>' +
@@ -253,6 +262,9 @@ function buildAdPage(ad, relatedAds) {
         'function reveal(el){if(!el.classList.contains("blurred"))return;el.classList.remove("blurred");trackView();var v=el.getAttribute("data-v");if(el.classList.contains("wa-tag")){el.innerHTML="<a href=\\"tel:"+v+"\\" style=\\"color:#27ae60;text-decoration:none\\">Telefon: "+v+" &#8599;</a>"}else{el.innerHTML=\'<a href="mailto:\'+v+\'" style="color:#2980b9;text-decoration:none">\'+v+\' &#9993;</a>\'}}\n' +
         'function copyLink(){navigator.clipboard.writeText("' + url + '").then(function(){toast("Link kopeeritud!")}).catch(function(){toast("' + url + '")})}\n' +
         'function toast(msg){var t=document.getElementById("toastEl");t.textContent=msg;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},2500)}\n' +
+        'var voted=JSON.parse(localStorage.getItem("sk_votes")||"{}");\n' +
+        'if(voted[' + ad.id + ']){document.getElementById(voted[' + ad.id + ']==="like"?"likeBtn":"dislikeBtn").style.background=voted[' + ad.id + ']==="like"?"#e8f5e9":"#fce4ec";document.getElementById("likeBtn").disabled=true;document.getElementById("dislikeBtn").disabled=true}\n' +
+        'function vote(type){if(voted[' + ad.id + '])return;fetch("/.netlify/functions/vote",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({adId:' + ad.id + ',type:type})}).then(function(r){return r.json()}).then(function(d){if(d.likes!==undefined){document.getElementById("likeCnt").textContent=d.likes;document.getElementById("dislikeCnt").textContent=d.dislikes;voted[' + ad.id + ']=type;localStorage.setItem("sk_votes",JSON.stringify(voted));document.getElementById(type==="like"?"likeBtn":"dislikeBtn").style.background=type==="like"?"#e8f5e9":"#fce4ec";document.getElementById("likeBtn").disabled=true;document.getElementById("dislikeBtn").disabled=true;toast(type==="like"?"T\\u00e4name!":"T\\u00e4name tagasiside eest!")}}).catch(function(){toast("Viga")})}\n' +
         '</script>\n' +
 
         '</body>\n</html>';
