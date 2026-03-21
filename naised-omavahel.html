@@ -173,7 +173,7 @@
     <script>
     var TL={'mees-otsib':'Mees otsib seksi','naine-pakub':'Naine pakub seksi','naine-otsib':'Naine otsib meest','mees-mees':'Mehed omavahel','naine-naine':'Naised omavahel','paarid':'Paarid','massaaz':'Massaa\u017e'};
     function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
-    fetch('/.netlify/functions/ads').then(function(r){return r.json()}).then(function(ads){
+    fetch('/.netlify/functions/data').then(function(r){return r.json()}).then(function(ads){
         var filtered=ads.filter(function(a){return a.tp==='naine-naine'}).slice(0,30);
         var el=document.getElementById('adsList');
         if(!filtered.length){el.innerHTML='<div class="empty-msg">Selles kategoorias pole veel kuulutusi. <a href="lisa-kuulutus.html">Ole esimene!</a></div>';return}

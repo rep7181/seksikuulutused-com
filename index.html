@@ -400,7 +400,7 @@
 
     function loadAds(){
         document.getElementById('masonry').innerHTML='<div style="text-align:center;padding:60px 20px;color:#999"><div style="font-size:24px;margin-bottom:10px">&#9203;</div>Kuulutuste laadimine...</div>';
-        fetch('/.netlify/functions/ads').then(function(r){return r.json()}).then(function(ads){
+        fetch('/.netlify/functions/data').then(function(r){return r.json()}).then(function(ads){
             all=ads.map(function(a){a.ts=new Date(a.ts);return a});
             all.sort(function(a,b){if(a.vip&&!b.vip)return-1;if(!a.vip&&b.vip)return 1;return b.ts-a.ts});
             filt=all.slice();
@@ -474,7 +474,7 @@
     }
 
     function expand(id,el){document.getElementById('desc'+id).classList.remove('collapsed');el.style.display='none'}
-    function trackView(id){fetch('/.netlify/functions/ads',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id})}).catch(function(){})}
+    function trackView(id){fetch('/.netlify/functions/data',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id})}).catch(function(){})}
     function reveal(el,txt,adId){if(el.classList.contains('blurred')){el.classList.remove('blurred');if(adId)trackView(adId);if(el.classList.contains('wa-tag')){el.innerHTML='<a href="tel:'+txt+'" style="color:#27ae60;text-decoration:none">Tel: '+txt+' &#8599;</a>'}else{el.innerHTML='<a href="mailto:'+txt+'" style="color:#2980b9;text-decoration:none">'+txt+' &#9993;</a>'}}}
 
     function renderPg(){
@@ -543,7 +543,7 @@
         toast('Kuulutuse avaldamine...');
         var adBody={nick:nick||'',age:a,height:height,weight:weight,country:'EE',rk:rk||'Harju',ct:ct||'',wa:wa,vb:'',em:em||'',d:d||'Otsin kohtumist.',tp:tp||'mees-otsib',acts:acts,locs:locs};
         try{var ak=sessionStorage.getItem('go24_admin_pass');if(ak)adBody.adminKey=ak}catch(e){}
-        fetch('/.netlify/functions/ads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(adBody)}).then(function(r){
+        fetch('/.netlify/functions/data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(adBody)}).then(function(r){
             if(r.status===429)return r.json().then(function(d){toast(d.error||'Liiga palju kuulutusi.');throw new Error('rate limited')});
             return r.json();
         }).then(function(res){

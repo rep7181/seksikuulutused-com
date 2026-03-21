@@ -249,7 +249,7 @@ function buildAdPage(ad, relatedAds) {
         'function acceptCookies(){localStorage.setItem("ck","1");document.getElementById("cookieBanner").classList.add("hidden")}\n' +
         'function declineCookies(){localStorage.setItem("ck","0");document.getElementById("cookieBanner").classList.add("hidden")}\n' +
         '(function(){if(localStorage.getItem("ck")!==null)document.getElementById("cookieBanner").classList.add("hidden")})()\n' +
-        'function trackView(){fetch("/.netlify/functions/ads",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:' + ad.id + '})}).catch(function(){})}\n' +
+        'function trackView(){fetch("/.netlify/functions/data",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:' + ad.id + '})}).catch(function(){})}\n' +
         'function reveal(el){if(!el.classList.contains("blurred"))return;el.classList.remove("blurred");trackView();var v=el.getAttribute("data-v");if(el.classList.contains("wa-tag")){el.innerHTML="<a href=\\"tel:"+v+"\\" style=\\"color:#27ae60;text-decoration:none\\">Telefon: "+v+" &#8599;</a>"}else{el.innerHTML=\'<a href="mailto:\'+v+\'" style="color:#2980b9;text-decoration:none">\'+v+\' &#9993;</a>\'}}\n' +
         'function copyLink(){navigator.clipboard.writeText("' + url + '").then(function(){toast("Link kopeeritud!")}).catch(function(){toast("' + url + '")})}\n' +
         'function toast(msg){var t=document.getElementById("toastEl");t.textContent=msg;t.classList.add("show");setTimeout(function(){t.classList.remove("show")},2500)}\n' +

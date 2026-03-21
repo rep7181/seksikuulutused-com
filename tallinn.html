@@ -151,7 +151,7 @@
 
     <script>
     var typeLabels={'mees-otsib':'Mees otsib','naine-pakub':'Naine pakub','naine-otsib':'Naine otsib','mees-mees':'Mehed omavahel','naine-naine':'Naised omavahel','paarid':'Paarid','massaaz':'Massaa\u017e'};
-    fetch('/.netlify/functions/ads').then(function(r){return r.json()}).then(function(ads){
+    fetch('/.netlify/functions/data').then(function(r){return r.json()}).then(function(ads){
         var filtered=ads.filter(function(a){return a.rk==='Harju'}).slice(0,10);
         var el=document.getElementById('adsList');
         if(!filtered.length){el.innerHTML='<div class="empty-msg">Tallinnast pole veel kuulutusi. <a href="lisa-kuulutus.html">Ole esimene!</a></div>';return}

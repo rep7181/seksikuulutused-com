@@ -405,7 +405,7 @@
         toast('Lisan kuulutust...');
         var adBody={nick:nick||'',age:a,height:height,weight:weight,country:'EE',rk:rk,ct:ct||'',phone:phone||'',em:em||'',d:d||'',tp:cat||'mees-otsib',acts:acts,locs:locs};
         try{var ak=sessionStorage.getItem('go24_admin_pass');if(ak)adBody.adminKey=ak}catch(e){}
-        fetch('/.netlify/functions/ads',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(adBody)}).then(function(r){
+        fetch('/.netlify/functions/data',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(adBody)}).then(function(r){
             if(r.status===429)return r.json().then(function(d){toast(d.error||'Liiga palju kuulutusi. Palun oodake.');throw new Error('rate limited')});
             return r.json();
         }).then(function(res){

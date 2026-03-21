@@ -31,7 +31,7 @@ const CATEGORY_TYPE_MAP = {
     'naine_otsib_naist': 'naine-naine',
     'soprus_muu': 'paarid'
 };
-const API_URL = 'https://seksikuulutused.netlify.app/.netlify/functions/ads';
+const API_URL = 'https://seksikuulutused.netlify.app/.netlify/functions/data';
 const ADMIN_KEY = 'seksikuulutused2026';
 const SEEN_FILE = path.join(__dirname, '.scraped-ids-planet.json');
 
