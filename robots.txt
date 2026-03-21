@@ -3,5 +3,7 @@ Allow: /
 Disallow: /admin.html
 Disallow: /.netlify/
 
+Sitemap: https://www.seksikuulutused.com/sitemap-index.xml
 Sitemap: https://www.seksikuulutused.com/sitemap.xml
+Sitemap: https://www.seksikuulutused.com/sitemap-tags.xml
 Sitemap: https://www.seksikuulutused.com/sitemap-dynamic.xml
