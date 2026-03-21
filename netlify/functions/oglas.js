@@ -161,7 +161,7 @@ function buildAdPage(ad, relatedAds) {
         '.ck-decline{background:#7f8c8d;color:#fff}\n' +
         '.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2c3e50;color:#fff;padding:8px 20px;border-radius:3px;font-size:13px;font-weight:700;z-index:9998;opacity:0;transition:opacity .3s}\n' +
         '.toast.show{opacity:1}\n' +
-        '@media(max-width:700px){.header-inner{flex-direction:column;gap:6px;text-align:center}.site-nav a{padding:8px 10px;font-size:12px}.item-bottom{font-size:11px}.wa-tag,.em-tag{font-size:11px;padding:2px 7px}.topbar{font-size:11px}.related-grid{grid-template-columns:1fr}}\n' +
+        '@media(max-width:700px){.header-inner{flex-direction:column;gap:6px;text-align:center}.site-nav{overflow-x:auto;-webkit-overflow-scrolling:touch}.site-nav ul{flex-wrap:nowrap;white-space:nowrap}.site-nav a{padding:8px 10px;font-size:11px}.item{padding:10px}.item-img{max-width:100%;max-height:250px}.item-bottom{font-size:11px}.wa-tag,.em-tag{font-size:11px;padding:2px 7px}.topbar{font-size:11px}.related-grid{grid-template-columns:1fr}.vote-bar button{font-size:12px;padding:5px 10px}}\n' +
         '</style>\n' +
         '<script type="application/ld+json">\n' +
         JSON.stringify({
