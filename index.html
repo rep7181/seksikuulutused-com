@@ -278,9 +278,12 @@
 
     <nav class="site-nav"><div class="wrap"><ul>
         <li><a href="index.html" class="active">Kuulutused</a></li>
+        <li><a href="javascript:void(0)" onclick="filterType('mees-otsib')">Mees otsib seksi</a></li>
+        <li><a href="javascript:void(0)" onclick="filterType('naine-pakub')">Naine pakub seksi</a></li>
+        <li><a href="javascript:void(0)" onclick="filterType('mees-mees')">Mehed omavahel</a></li>
+        <li><a href="javascript:void(0)" onclick="filterType('naine-naine')">Naised omavahel</a></li>
+        <li><a href="javascript:void(0)" onclick="filterType('massaaz')">Massaa&zcaron;</a></li>
         <li><a href="lisa-kuulutus.html">Lisa kuulutus</a></li>
-        <li><a href="#faq">KKK</a></li>
-        <li><a href="privaatsus.html">Privaatsus</a></li>
     </ul></div></nav>
 
     <div class="wrap">
@@ -306,7 +309,7 @@
                 <div class="fg-item"><label>Vanus max</label><input type="number" id="fAt" placeholder="70" min="18" max="70" style="width:70px;min-width:70px" onchange="applyFilters()"></div>
                 <div class="fg-item"><label>Maakond</label><select id="fReg" onchange="updCityOpts(this.value,'fCity');applyFilters()"><option value="">K&otilde;ik</option></select></div>
                 <div class="fg-item"><label>Linn</label><select id="fCity" onchange="cityFilter=this.value;applyFilters();updCityTag()"><option value="">K&otilde;ik linnad</option></select></div>
-                <div class="fg-item"><label>Kategooria</label><select id="fT" onchange="applyFilters()"><option value="">K&otilde;ik</option><option value="mees-otsib">Mees otsib</option><option value="naine-pakub">Naine pakub</option><option value="naine-otsib">Naine otsib</option><option value="mees-mees">Mehed omavahel</option><option value="naine-naine">Naised omavahel</option><option value="paarid">Paarid</option><option value="massaaz">Massaa&zcaron;</option></select></div>
+                <div class="fg-item"><label>Kategooria</label><select id="fT" onchange="applyFilters()"><option value="">K&otilde;ik</option><option value="mees-otsib">Mees otsib seksi</option><option value="naine-pakub">Naine pakub seksi</option><option value="naine-otsib">Naine otsib meest</option><option value="mees-mees">Mehed omavahel</option><option value="naine-naine">Naised omavahel</option><option value="paarid">Paarid</option><option value="massaaz">Massaa&zcaron;</option></select></div>
                 <div class="fg-item"><label>Tegevus</label><select id="fAct" onchange="applyFilters()"><option value="">K&otilde;ik</option><option>Suuseks</option><option>Anaal</option><option>Massaa&zcaron;</option><option>Suudlemine</option><option>Fetish</option><option>BDSM</option><option>69</option><option>Domineerimine</option><option>Vestlus</option><option>Webcam</option><option>Vanemad</option><option>Tutvumine</option></select></div>
                 <div class="fg-item"><label>Koht</label><select id="fLoc" onchange="applyFilters()"><option value="">K&otilde;ik</option><option>Oma koht</option><option>Auto</option><option>Hotell</option><option>V&auml;ljas</option><option>Saan reisida</option></select></div>
                 <div class="fg-item"><label>Avaldatud</label><select id="fWhen" onchange="applyFilters()"><option value="">K&otilde;ik</option><option value="today">T&auml;na</option><option value="week">See n&auml;dal</option><option value="month">See kuu</option></select></div>
@@ -334,7 +337,7 @@
                 <div><label>Linn</label><select id="xCity"><option value="">Vali maakond enne</option></select></div>
                 <div><label>Pikkus (cm)</label><input type="number" id="xHeight" min="100" max="250" placeholder="180"></div>
                 <div><label>Kaal (kg)</label><input type="number" id="xWeight" min="30" max="300" placeholder="75"></div>
-                <div><label>Kategooria</label><select id="xType"><option value="mees-otsib">Mees otsib</option><option value="naine-pakub">Naine pakub</option><option value="naine-otsib">Naine otsib</option><option value="mees-mees">Mehed omavahel</option><option value="naine-naine">Naised omavahel</option><option value="paarid">Paarid</option><option value="massaaz">Massaa&zcaron;</option></select></div>
+                <div><label>Kategooria</label><select id="xType"><option value="mees-otsib">Mees otsib seksi</option><option value="naine-pakub">Naine pakub seksi</option><option value="naine-otsib">Naine otsib meest</option><option value="mees-mees">Mehed omavahel</option><option value="naine-naine">Naised omavahel</option><option value="paarid">Paarid</option><option value="massaaz">Massaa&zcaron;</option></select></div>
                 <div><label>Telefon</label><input type="text" id="xWa" placeholder="+372 5123 4567"></div>
                 <div><label>Email</label><input type="email" id="xEm" placeholder="sinu@email.ee"></div>
                 <div class="full"><label>Tegevused</label><div class="chk-group" id="xActs"><label class="chk-lbl"><input type="checkbox" value="Suuseks"> Suuseks</label><label class="chk-lbl"><input type="checkbox" value="Anaal"> Anaal</label><label class="chk-lbl"><input type="checkbox" value="Massaaž"> Massaa&zcaron;</label><label class="chk-lbl"><input type="checkbox" value="Suudlemine"> Suudlemine</label><label class="chk-lbl"><input type="checkbox" value="Fetish"> Fetish</label><label class="chk-lbl"><input type="checkbox" value="BDSM"> BDSM</label><label class="chk-lbl"><input type="checkbox" value="69"> 69</label><label class="chk-lbl"><input type="checkbox" value="Domineerimine"> Domineerimine</label><label class="chk-lbl"><input type="checkbox" value="Vestlus"> Vestlus</label><label class="chk-lbl"><input type="checkbox" value="Webcam"> Webcam</label><label class="chk-lbl"><input type="checkbox" value="Vanemad"> Vanemad</label><label class="chk-lbl"><input type="checkbox" value="Tutvumine"> Tutvumine</label></div></div>
@@ -386,7 +389,7 @@
 
     <script>
     var TY=['mees-otsib','naine-pakub','naine-otsib','mees-mees','naine-naine','paarid','massaaz'],
-        TL={'mees-otsib':'Mees otsib','naine-pakub':'Naine pakub','naine-otsib':'Naine otsib','mees-mees':'Mehed omavahel','naine-naine':'Naised omavahel','paarid':'Paarid','massaaz':'Massaa\u017e'};
+        TL={'mees-otsib':'Mees otsib seksi','naine-pakub':'Naine pakub seksi','naine-otsib':'Naine otsib meest','mees-mees':'Mehed omavahel','naine-naine':'Naised omavahel','paarid':'Paarid','massaaz':'Massaa\u017e'};
     var ACTS=['Suuseks','Anaal','Massaa\u017e','Suudlemine','Fetish','BDSM','69','Domineerimine','Vestlus','Webcam','Vanemad','Tutvumine'],
         LOCS=['Oma koht','Auto','Hotell','V\u00e4ljas','Saan reisida'],
         C={
@@ -510,6 +513,7 @@
     }
     var cityFilter='';
     function updCityOpts(reg,selId){var s=document.getElementById(selId),cc=C['EE'];s.innerHTML='<option value="">K\u00f5ik linnad</option>';if(reg&&cc[reg])cc[reg].forEach(function(c){s.innerHTML+='<option>'+c+'</option>'});else Object.keys(cc).forEach(function(r){cc[r].forEach(function(c){s.innerHTML+='<option>'+c+'</option>'})})}
+    function filterType(tp){document.getElementById('fT').value=tp;applyFilters();document.querySelectorAll('.site-nav a').forEach(function(a){a.classList.remove('active')});event.target.classList.add('active');document.getElementById('annonceListe').scrollIntoView({behavior:'smooth'})}
     function filterCity(c){cityFilter=c;pg=1;applyFilters();updCityTag();document.getElementById('annonceListe').scrollIntoView({behavior:'smooth'})}
     function clearCity(){cityFilter='';applyFilters();updCityTag()}
     function updCityTag(){var el=document.getElementById('cityTag'),inner=document.getElementById('cityTagInner');if(cityFilter){el.style.display='block';inner.innerHTML=cityFilter+' <span onclick="clearCity()" style="cursor:pointer;font-size:14px;opacity:.7">&times;</span>'}else{el.style.display='none'}}

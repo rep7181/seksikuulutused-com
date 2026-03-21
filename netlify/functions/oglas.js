@@ -13,7 +13,7 @@ function esc(str) {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
-var TL = { 'mees-otsib':'Mees otsib', 'naine-pakub':'Naine pakub', 'naine-otsib':'Naine otsib', 'mees-mees':'Mehed omavahel', 'naine-naine':'Naised omavahel', 'paarid':'Paarid', 'massaaz':'Massaaž' };
+var TL = { 'mees-otsib':'Mees otsib seksi', 'naine-pakub':'Naine pakub seksi', 'naine-otsib':'Naine otsib meest', 'mees-mees':'Mehed omavahel', 'naine-naine':'Naised omavahel', 'paarid':'Paarid', 'massaaz':'Massaaž' };
 
 function maskPhone(ph) {
     if (!ph || ph.length < 7) return ph || '';
