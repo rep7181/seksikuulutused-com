@@ -171,23 +171,19 @@
     </div></footer>
 
     <script>
-    var typeLabels={'mees-otsib':'Mees otsib seksi','naine-pakub':'Naine pakub seksi','naine-otsib':'Naine otsib meest','mees-mees':'Mehed omavahel','naine-naine':'Naised omavahel','paarid':'Paarid','massaaz':'Massaa\u017e'};
-    function blurVal(v){if(!v)return'';var l=v.length;if(l<=4)return v[0]+'***';return v.substring(0,3)+'*'.repeat(l-5)+(l>5?v.substring(l-2):'**');}
-    function rvl(el){if(!el.classList.contains('blurred'))return;el.classList.remove('blurred');var v=el.getAttribute('data-v');if(el.classList.contains('wa-tag'))el.innerHTML='<a href="tel:'+v+'" style="color:#27ae60;text-decoration:none">Tel: '+v+' &#8599;</a>';else el.innerHTML='<a href="mailto:'+v+'" style="color:#2980b9;text-decoration:none">'+v+' &#9993;</a>';}
+    var TL={'mees-otsib':'Mees otsib seksi','naine-pakub':'Naine pakub seksi','naine-otsib':'Naine otsib meest','mees-mees':'Mehed omavahel','naine-naine':'Naised omavahel','paarid':'Paarid','massaaz':'Massaa\u017e'};
+    function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
     fetch('/.netlify/functions/ads').then(function(r){return r.json()}).then(function(ads){
-        var filtered=ads.filter(function(a){return a.tp==='mees-otsib'}).slice(0,20);
+        var filtered=ads.filter(function(a){return a.tp==='mees-otsib'}).slice(0,30);
         var el=document.getElementById('adsList');
         if(!filtered.length){el.innerHTML='<div class="empty-msg">Selles kategoorias pole veel kuulutusi. <a href="lisa-kuulutus.html">Ole esimene!</a></div>';return}
         el.innerHTML=filtered.map(function(a){
-            var tags='';if(a.acts&&a.acts.length)tags=a.acts.map(function(t){return'<span>'+t+'</span>'}).join('');
-            var tl=typeLabels[a.tp]||a.tp||'';
-            var imgHtml=a.img?'<a href="/kuulutus/'+a.id+'"><img src="'+a.img+'" alt="'+(a.nick||'')+'" class="ad-img" onerror="this.style.display=\'none\'"></a>':'';
-            var waHtml=a.wa?'<span class="wa-tag blurred" data-v="'+a.wa+'" onclick="rvl(this)">Tel: '+blurVal(a.wa)+'</span>':'';
-            var emHtml=a.em?'<span class="em-tag blurred" data-v="'+a.em+'" onclick="rvl(this)">'+blurVal(a.em)+'</span>':'';
-            var viewsHtml='<span class="views-tag">&#128065; '+(a.views||0)+'</span>';
-            return'<div class="ad-card">'+imgHtml+'<a href="/kuulutus/'+a.id+'" style="color:inherit;text-decoration:none"><div class="ad-head">'+(a.nick||'Anon\u00fc\u00fcmne')+(a.age?', '+a.age:'')+'</div></a><div class="ad-meta">'+(a.ct||'')+((a.ct&&a.rk)?', ':'')+(a.rk||'')+(tl?' &middot; <span class="type-tag">'+tl+'</span>':'')+viewsHtml+'</div><div class="ad-desc">'+(a.d||'').substring(0,200)+(a.d&&a.d.length>200?'...':'')+'</div>'+(tags?'<div class="ad-tags">'+tags+'</div>':'')+'<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">'+waHtml+emHtml+'<a href="/kuulutus/'+a.id+'" style="color:#2980b9;font-size:13px;font-weight:700;margin-left:auto">Vaata &rarr;</a></div></div>'
+            var tags='';if(a.acts&&a.acts.length)tags=a.acts.map(function(t){return'<span>'+esc(t)+'</span>'}).join('');
+            var tl=TL[a.tp]||'';
+            var imgHtml=a.img?'<a href="/kuulutus/'+a.id+'"><img src="'+esc(a.img)+'" alt="" class="ad-img" loading="lazy" onerror="this.style.display=\'none\'"></a>':'';
+            return'<div class="ad-card">'+imgHtml+'<a href="/kuulutus/'+a.id+'" style="color:inherit;text-decoration:none"><div class="ad-head">'+esc(a.nick||'Anon\u00fc\u00fcmne')+', '+a.age+'</div></a><div class="ad-meta">'+esc(a.ct||'')+((a.ct&&a.rk)?', ':'')+esc(a.rk||'')+(tl?' &middot; <span class="type-tag">'+tl+'</span>':'')+'</div><div class="ad-desc">'+esc((a.d||'').substring(0,200))+(a.d&&a.d.length>200?'...':'')+'</div>'+(tags?'<div class="ad-tags">'+tags+'</div>':'')+'<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">'+(a.wa?'<span class="wa-tag" style="cursor:default">Tel: '+esc(a.wa)+'</span>':'')+(a.em?'<span class="em-tag" style="cursor:default">'+esc(a.em)+'</span>':'')+'<a href="/kuulutus/'+a.id+'" style="color:#2980b9;font-size:13px;font-weight:700;margin-left:auto">Vaata &rarr;</a></div></div>'
         }).join('');
-    }).catch(function(){document.getElementById('adsList').innerHTML='<div class="empty-msg">Viga laadimisel. <a href="index.html">Vaata k\u00f5iki kuulutusi</a></div>'});
+    }).catch(function(e){document.getElementById('adsList').innerHTML='<div class="empty-msg">Viga: '+e.message+'</div>'});
     </script>
 </body>
 </html>
