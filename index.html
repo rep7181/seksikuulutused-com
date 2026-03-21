@@ -439,12 +439,21 @@
             }
             return;
         }
-        el.innerHTML=items.map(function(l){
+        var nativeAd='<div class="item vip-item"><span class="vip-dot">VIP</span><span class="new-dot">Uus</span>'+
+            '<div class="item-head"><a href="https://luxegrante.com/#/adv/LCZ45488" target="_blank" rel="noopener" class="item-who" style="color:inherit;text-decoration:none">Seksikas Kristiina, 24</a><div class="item-actions"><span class="item-time">just n\u00fc\u00fcd</span></div></div>'+
+            '<div class="item-meta">Tallinn, Harju &middot; 170 cm &middot; 55 kg</div>'+
+            '<a href="https://luxegrante.com/#/adv/LCZ45488" target="_blank" rel="noopener"><img class="item-img" src="https://mahajataha.com/upload/img_665823.jpeg" alt="Kristiina" loading="lazy" onerror="this.style.display=\'none\'"></a>'+
+            '<div class="item-desc">Tere! Olen ilus ja seksikas neiu Tallinnast. Otsin meest p\u00f5nevaks kohtumiseks. Pakun unustamatut kogemust privaatses ja m\u00f5nusas \u00f5hkkonnas. Kirjuta mulle ja lepime kokku! \u2764\ufe0f</div>'+
+            '<div style="margin-bottom:6px;line-height:1.8"><span class="pref-tag pref-act">Suuseks</span><span class="pref-tag pref-act">Massaa\u017e</span><span class="pref-tag pref-loc">Oma koht</span><span class="pref-tag pref-loc">Hotell</span></div>'+
+            '<div class="item-bottom"><a href="https://luxegrante.com/#/adv/LCZ45488" target="_blank" rel="noopener" class="wa-tag" style="text-decoration:none">Vaata profiili \u2197</a>'+
+            '<span class="type-tag">Naine pakub</span><span class="views-tag">&#128065; 847</span></div></div>';
+        el.innerHTML=items.map(function(l,idx){
             var lk=isFav(l.wa),isNew=(Date.now()-l.ts)<36e5,long=l.d.length>150;
             var prefHtml='';
             if(l.acts&&l.acts.length)prefHtml+=l.acts.map(function(a){return'<span class="pref-tag pref-act">'+a+'</span>'}).join('');
             if(l.locs&&l.locs.length)prefHtml+=l.locs.map(function(a){return'<span class="pref-tag pref-loc">'+a+'</span>'}).join('');
-            return'<div class="item'+(l.vip?' vip-item':'')+'">'+(l.vip?'<span class="vip-dot">VIP</span>':'')+(isNew?'<span class="new-dot">Uus</span>':'')+
+            var adHtml=(idx>0&&idx%5===0?nativeAd:'');
+            return adHtml+'<div class="item'+(l.vip?' vip-item':'')+'">'+(l.vip?'<span class="vip-dot">VIP</span>':'')+(isNew?'<span class="new-dot">Uus</span>':'')+
                 '<div class="item-head"><a href="/kuulutus/'+l.id+'" class="item-who" style="color:inherit;text-decoration:none">'+(l.nick||'Anon\u00fc\u00fcmne')+', '+l.age+'</a><div class="item-actions"><button class="fav-btn'+(lk?' liked':'')+'" onclick="togFav(\''+l.wa.replace(/'/g,"\\'")+'\','+l.age+',\''+(l.ct||'').replace(/'/g,"\\'")+'\')">'+
                 (lk?'&#9829;':'&#9825;')+'</button><span class="item-time" title="'+fmtT(l.ts)+'">'+relT(l.ts)+'</span></div></div>'+
                 '<div class="item-meta">'+((l.ct&&l.ct.trim())?l.ct.trim()+', ':'')+l.rk+(l.height?' &middot; '+l.height+' cm':'')+(l.weight?' &middot; '+l.weight+' kg':'')+'</div>'+
