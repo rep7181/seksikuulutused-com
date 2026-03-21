@@ -150,25 +150,7 @@ exports.handler = async function(event) {
             await s.set('ads', JSON.stringify(ads));
             await s.set('next-id', String(nextId + 1));
 
-            // Email notification for non-scraper ads
-            if (!isAdmin) {
-                try {
-                    await fetch('https://formsubmit.co/ajax/annon-marketing@proton.me', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                        body: JSON.stringify({
-                            _subject: '[SeksiKuulutused] Uus kuulutus #' + nextId,
-                            name: nick || 'Anonüümne',
-                            email: em || wa || 'puudub',
-                            message: 'Uus kuulutus lisatud!\n\nNimi: ' + (nick || 'Anonüümne') + '\nVanus: ' + age + '\nLinn: ' + (ct || '') + ', ' + rk + '\nTel: ' + (wa || '-') + '\nEmail: ' + (em || '-') + '\nKategooria: ' + tp + '\n\nKirjeldus: ' + (d || '').substring(0, 500),
-                            _template: 'table',
-                            _captcha: 'false'
-                        })
-                    });
-                } catch(e) { /* silent */ }
-            }
-
-            return { statusCode: 200, headers: CORS, body: JSON.stringify({ ok: true, ad: newAd }) };
+            return { statusCode: 200, headers: CORS, body: JSON.stringify({ ok: true, ad: newAd, notify: !isAdmin }) };
         } catch(err) {
             return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: err.message }) };
         }
