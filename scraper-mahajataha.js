@@ -35,7 +35,7 @@ const CATEGORY_TYPE_MAP = {
     'paarid': 'paarid',
     'massaaz': 'massaaz'
 };
-const API_URL = 'https://seksikuulutused.com/.netlify/functions/ads';
+const API_URL = 'https://seksikuulutused.netlify.app/.netlify/functions/ads';
 const ADMIN_KEY = 'seksikuulutused2026';
 const SEEN_FILE = path.join(__dirname, '.scraped-ids-mahajataha.json');
 
