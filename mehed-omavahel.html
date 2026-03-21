@@ -60,7 +60,7 @@
         .ad-head{font-weight:700;font-size:14px;margin-bottom:3px}
         .ad-meta{font-size:12px;color:#95a5a6;margin-bottom:4px}
         .ad-desc{font-size:13px;color:#555;line-height:1.5}
-        .ad-img{width:100%;max-height:220px;object-fit:cover;border-radius:2px;margin-bottom:8px}
+        .ad-img{width:90px;height:90px;object-fit:cover;border-radius:4px;float:left;margin-right:12px;margin-bottom:4px}
         .ad-tags{margin-top:6px}
         .ad-tags span{display:inline-block;padding:1px 6px;border-radius:2px;font-size:10px;font-weight:700;margin:1px 2px;background:#fce4ec;color:#c0392b;border:1px solid #f5b7b1}
         .type-tag{display:inline-block;background:#f4ecf7;color:#8e44ad;padding:2px 7px;border-radius:2px;font-size:11px;font-weight:700;border:1px solid #e8daef}
@@ -173,6 +173,7 @@
     <script>
     var TL={'mees-otsib':'Mees otsib seksi','naine-pakub':'Naine pakub seksi','naine-otsib':'Naine otsib meest','mees-mees':'Mehed omavahel','naine-naine':'Naised omavahel','paarid':'Paarid','massaaz':'Massaa\u017e'};
     function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+    function rvl(el){if(!el.classList.contains('blurred'))return;el.classList.remove('blurred');var v=el.getAttribute('data-v');if(el.classList.contains('wa-tag'))el.innerHTML='<a href="tel:'+v+'" style="color:#27ae60;text-decoration:none">Tel: '+v+' &#8599;</a>';else el.innerHTML='<a href="mailto:'+v+'" style="color:#2980b9;text-decoration:none">'+v+' &#9993;</a>';}
     fetch('/.netlify/functions/data').then(function(r){return r.json()}).then(function(ads){
         var filtered=ads.filter(function(a){return a.tp==='mees-mees'}).slice(0,30);
         var el=document.getElementById('adsList');
@@ -181,7 +182,7 @@
             var tags='';if(a.acts&&a.acts.length)tags=a.acts.map(function(t){return'<span>'+esc(t)+'</span>'}).join('');
             var tl=TL[a.tp]||'';
             var imgHtml=a.img?'<a href="/kuulutus/'+a.id+'"><img src="'+esc(a.img)+'" alt="" class="ad-img" loading="lazy" onerror="this.style.display=\'none\'"></a>':'';
-            return'<div class="ad-card">'+imgHtml+'<a href="/kuulutus/'+a.id+'" style="color:inherit;text-decoration:none"><div class="ad-head">'+esc(a.nick||'Anon\u00fc\u00fcmne')+', '+a.age+'</div></a><div class="ad-meta">'+esc(a.ct||'')+((a.ct&&a.rk)?', ':'')+esc(a.rk||'')+(tl?' &middot; <span class="type-tag">'+tl+'</span>':'')+'</div><div class="ad-desc">'+esc((a.d||'').substring(0,200))+(a.d&&a.d.length>200?'...':'')+'</div>'+(tags?'<div class="ad-tags">'+tags+'</div>':'')+'<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">'+(a.wa?'<span class="wa-tag" style="cursor:default">Tel: '+esc(a.wa)+'</span>':'')+(a.em?'<span class="em-tag" style="cursor:default">'+esc(a.em)+'</span>':'')+'<a href="/kuulutus/'+a.id+'" style="color:#2980b9;font-size:13px;font-weight:700;margin-left:auto">Vaata &rarr;</a></div></div>'
+            return'<div class="ad-card">'+imgHtml+'<a href="/kuulutus/'+a.id+'" style="color:inherit;text-decoration:none"><div class="ad-head">'+esc(a.nick||'Anon\u00fc\u00fcmne')+', '+a.age+'</div></a><div class="ad-meta">'+esc(a.ct||'')+((a.ct&&a.rk)?', ':'')+esc(a.rk||'')+(tl?' &middot; <span class="type-tag">'+tl+'</span>':'')+'</div><div class="ad-desc">'+esc((a.d||'').substring(0,200))+(a.d&&a.d.length>200?'...':'')+'</div>'+(tags?'<div class="ad-tags">'+tags+'</div>':'')+'<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">'+(a.wa?'<span class="wa-tag blurred" data-v="'+a.wa+'" onclick="rvl(this)" style="cursor:pointer">Tel: '+a.wa.substring(0,7)+'<span class="wa-hidden"> ** **</span></span>':'')+(a.em?'<span class="em-tag blurred" data-v="'+a.em+'" onclick="rvl(this)" style="cursor:pointer">'+a.em.substring(0,3)+'<span class="em-hidden">*****</span></span>':'')+'<a href="/kuulutus/'+a.id+'" style="color:#2980b9;font-size:13px;font-weight:700;margin-left:auto">Vaata &rarr;</a></div></div>'
         }).join('');
     }).catch(function(e){document.getElementById('adsList').innerHTML='<div class="empty-msg">Viga: '+e.message+'</div>'});
     </script>
