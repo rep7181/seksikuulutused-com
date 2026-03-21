@@ -141,7 +141,9 @@ function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 async function fetchPage(url) {
     const res = await fetch(url);
-    return await res.text();
+    const buf = await res.arrayBuffer();
+    const decoder = new TextDecoder('iso-8859-1');
+    return decoder.decode(buf);
 }
 
 function parseListingPage(html, category) {
