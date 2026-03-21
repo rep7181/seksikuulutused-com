@@ -117,6 +117,7 @@ function buildAdPage(ad, relatedAds) {
         '.item-who{font-weight:700;font-size:14px}\n' +
         '.item-time{font-size:11px;color:#bdc3c7}\n' +
         '.item-meta{font-size:12px;color:#95a5a6;margin-bottom:6px}\n' +
+        '.item-img{width:100%;max-height:400px;object-fit:cover;border-radius:2px;margin-bottom:8px}\n' +
         '.item-desc{font-size:13px;color:#555;line-height:1.5;margin-bottom:8px;word-wrap:break-word;overflow-wrap:break-word}\n' +
         '.item-bottom{display:flex;align-items:center;gap:6px;flex-wrap:wrap}\n' +
         '.wa-tag{display:inline-flex;align-items:center;gap:4px;background:#e8f5e9;color:#27ae60;padding:3px 10px;border-radius:2px;font-size:12px;font-weight:700;border:1px solid #c8e6c9;cursor:pointer;transition:filter .3s}\n' +
@@ -210,6 +211,7 @@ function buildAdPage(ad, relatedAds) {
         (ad.height ? ' &middot; ' + ad.height + ' cm' : '') +
         (ad.weight ? ' &middot; ' + ad.weight + ' kg' : '') +
         ' &middot; ' + typeLabel + '</div>' +
+        (ad.img ? '<img class="item-img" src="' + esc(ad.img) + '" alt="' + nick + '" onerror="this.style.display=\'none\'">' : '') +
         '<div class="item-desc">' + desc + '</div>' +
         (prefHtml ? '<div style="margin-bottom:6px;line-height:1.8">' + prefHtml + '</div>' : '') +
         '<div class="item-bottom">' + contactHtml +

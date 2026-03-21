@@ -181,6 +181,10 @@ function parseListingPage(html, category) {
         const descMatch = block.match(/<b>Kuulutus:<\/b>\s*([\s\S]*?)(?:<br>\s*(?:<br>|<span|<font))/);
         ad.desc = descMatch ? descMatch[1].replace(/<[^>]+>/g, '').replace(/&#\d+;/g, '').trim() : '';
 
+        // Image - extract from upload/img_XXXXX.jpeg links
+        const imgMatch = block.match(/upload\/(img_\d+\.(?:jpe?g|png|gif|webp))/i);
+        ad.img = imgMatch ? 'https://mahajataha.com/upload/' + imgMatch[1] : '';
+
         // Skip private ads (SMS gateway contact)
         if (block.includes('MT PRIVATE') || block.includes('numbrile <b>13018</b>')) {
             continue;
@@ -232,7 +236,8 @@ async function postAd(ad) {
         d: ad.desc.substring(0, 1000),
         tp: CATEGORY_TYPE_MAP[ad.category] || 'mees-otsib',
         acts: detectActs(ad.desc),
-        locs: detectLocs(ad.desc)
+        locs: detectLocs(ad.desc),
+        img: ad.img || ''
     };
 
     if (DRY_RUN) {

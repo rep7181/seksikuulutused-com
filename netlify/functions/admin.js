@@ -81,6 +81,7 @@ exports.handler = async function(event) {
                     views: 0,
                     acts: body.acts || [],
                     locs: body.locs || [],
+                    img: (body.img || '').substring(0, 300),
                     vip: !!body.vip,
                     reported: false
                 };

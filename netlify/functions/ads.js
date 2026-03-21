@@ -141,6 +141,7 @@ exports.handler = async function(event) {
                 acts: acts,
                 locs: locs,
                 country: country,
+                img: (body.img || '').substring(0, 300),
                 vip: false,
                 reported: false
             };

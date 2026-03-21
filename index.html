@@ -105,6 +105,8 @@
         .fav-btn:hover,.fav-btn.liked{color:#e74c3c}
         .item-time{font-size:11px;color:#bdc3c7}
         .item-meta{font-size:12px;color:#95a5a6;margin-bottom:6px}
+        .item-img{width:100%;max-height:280px;object-fit:cover;border-radius:2px;margin-bottom:8px;cursor:pointer}
+        .item-img:hover{opacity:.9}
         .item-desc{font-size:13px;color:#555;line-height:1.5;margin-bottom:8px;word-wrap:break-word;overflow-wrap:break-word}
         .item-desc.collapsed{max-height:68px;overflow:hidden;position:relative}
         .item-desc.collapsed::after{content:'';position:absolute;bottom:0;left:0;right:0;height:20px;background:linear-gradient(transparent,#fff)}
@@ -446,6 +448,7 @@
                 '<div class="item-head"><a href="/kuulutus/'+l.id+'" class="item-who" style="color:inherit;text-decoration:none">'+(l.nick||'Anon\u00fc\u00fcmne')+', '+l.age+'</a><div class="item-actions"><button class="fav-btn'+(lk?' liked':'')+'" onclick="togFav(\''+l.wa.replace(/'/g,"\\'")+'\','+l.age+',\''+(l.ct||'').replace(/'/g,"\\'")+'\')">'+
                 (lk?'&#9829;':'&#9825;')+'</button><span class="item-time" title="'+fmtT(l.ts)+'">'+relT(l.ts)+'</span></div></div>'+
                 '<div class="item-meta">'+((l.ct&&l.ct.trim())?l.ct.trim()+', ':'')+l.rk+(l.height?' &middot; '+l.height+' cm':'')+(l.weight?' &middot; '+l.weight+' kg':'')+'</div>'+
+                (l.img?'<a href="/kuulutus/'+l.id+'"><img class="item-img" src="'+l.img+'" alt="'+(l.nick||'Kuulutus')+'" loading="lazy" onerror="this.style.display=\'none\'"></a>':'')+
                 '<div class="item-desc'+(long?' collapsed':'')+'" id="desc'+l.id+'">'+l.d+'</div>'+
                 (long?'<span class="show-more" onclick="expand('+l.id+',this)">N\u00e4ita rohkem &raquo;</span>':'')+
                 (prefHtml?'<div style="margin-bottom:6px;line-height:1.8">'+prefHtml+'</div>':'')+
