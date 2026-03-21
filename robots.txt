@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /.netlify/
+
+Sitemap: https://www.seksikuulutused.com/sitemap.xml
+Sitemap: https://www.seksikuulutused.com/sitemap-dynamic.xml

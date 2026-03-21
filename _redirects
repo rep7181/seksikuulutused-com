@@ -1,0 +1,2 @@
+/kuulutus/:id /.netlify/functions/oglas?id=:id 200
+/sitemap-dynamic.xml /.netlify/functions/sitemap-gen 200

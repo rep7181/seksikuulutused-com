@@ -1,0 +1,9 @@
+[[redirects]]
+  from = "/kuulutus/:id"
+  to = "/.netlify/functions/oglas?id=:id"
+  status = 200
+
+[[redirects]]
+  from = "/sitemap-dynamic.xml"
+  to = "/.netlify/functions/sitemap-gen"
+  status = 200

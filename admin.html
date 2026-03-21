@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | SeksiKuulutused.com</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔥</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Lato',sans-serif;background:#f5f6fa;color:#222;line-height:1.5;font-size:14px}
+        a{color:#2980b9;text-decoration:none}
+        a:hover{text-decoration:underline}
+
+        .login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh}
+        .login-box{background:#fff;border:1px solid #ddd;border-radius:8px;padding:40px;max-width:380px;width:90%;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+        .login-box h1{font-size:22px;margin-bottom:6px;color:#2c3e50}
+        .login-box p{font-size:13px;color:#888;margin-bottom:20px}
+        .login-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#222;font-size:14px;font-family:inherit;margin-bottom:12px}
+        .login-box input:focus{outline:none;border-color:#2c3e50}
+        .login-box button{width:100%;padding:12px;background:#2c3e50;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+        .login-box button:hover{background:#34495e}
+        .login-err{color:#e74c3c;font-size:12px;margin-bottom:8px;display:none}
+
+        .admin-wrap{display:none}
+        .admin-wrap.active{display:block}
+
+        .admin-topbar{background:#fff;border-bottom:2px solid #2c3e50;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+        .admin-topbar h1{font-size:18px;color:#2c3e50}
+        .admin-topbar h1 span{color:#888;font-weight:400;font-size:13px}
+        .admin-actions{display:flex;gap:8px;align-items:center}
+        .btn{padding:8px 16px;border:none;border-radius:4px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s}
+        .btn-red{background:#e74c3c;color:#fff}
+        .btn-red:hover{background:#c0392b}
+        .btn-blue{background:#2c3e50;color:#fff}
+        .btn-blue:hover{background:#34495e}
+        .btn-green{background:#27ae60;color:#fff}
+        .btn-green:hover{background:#219a52}
+        .btn-orange{background:#e67e22;color:#fff}
+        .btn-orange:hover{background:#d35400}
+        .btn-sm{padding:5px 10px;font-size:11px}
+
+        .admin-body{max-width:1200px;margin:0 auto;padding:20px}
+
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+        .stat-card{background:#fff;border:1px solid #ddd;border-radius:8px;padding:16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+        .stat-card .num{font-size:28px;font-weight:900;color:#2c3e50}
+        .stat-card .label{font-size:11px;color:#888;text-transform:uppercase;font-weight:700;margin-top:2px}
+
+        .tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:2px solid #ddd;padding-bottom:0}
+        .tab{padding:10px 20px;background:transparent;border:none;color:#888;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}
+        .tab:hover{color:#2c3e50}
+        .tab.active{color:#2c3e50;border-bottom-color:#2c3e50}
+
+        .panel{display:none}
+        .panel.active{display:block}
+
+        .toolbar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+        .toolbar input,.toolbar select{padding:8px 12px;border:1px solid #ddd;border-radius:4px;background:#fff;color:#222;font-family:inherit;font-size:13px}
+        .toolbar input:focus,.toolbar select:focus{outline:none;border-color:#2c3e50}
+        .toolbar input{flex:1;min-width:200px}
+        .bulk-bar{background:#eef0f3;border:1px solid #ddd;padding:8px 12px;border-radius:4px;margin-bottom:12px;display:none;align-items:center;gap:8px;font-size:12px}
+        .bulk-bar.show{display:flex}
+
+        .ad-table{width:100%;border-collapse:collapse}
+        .ad-table th{background:#f5f6fa;padding:10px 12px;text-align:left;font-size:11px;text-transform:uppercase;color:#888;font-weight:700;position:sticky;top:56px;z-index:50;border-bottom:2px solid #ddd}
+        .ad-table td{padding:10px 12px;border-bottom:1px solid #eee;font-size:13px;vertical-align:top}
+        .ad-table tr{background:#fff;transition:background .15s}
+        .ad-table tr:hover{background:#f8f9fa}
+        .ad-table tr.vip-row{background:#fef9e7;border-left:3px solid #f39c12}
+        .ad-table tr.reported-row{background:#fdedec;border-left:3px solid #e74c3c}
+        .ad-table .chk{width:16px;height:16px;cursor:pointer}
+        .ad-desc{max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .badge{display:inline-block;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:700;margin:1px}
+        .badge-vip{background:#f39c12;color:#000}
+        .badge-new{background:#e94560;color:#fff}
+        .badge-type{background:#eef0f3;color:#8e44ad}
+        .badge-reported{background:#e74c3c;color:#fff}
+        .contact-info{font-size:11px;color:#888}
+        .contact-info a{color:#27ae60}
+
+        .ad-form{background:#fff;border:1px solid #ddd;border-radius:8px;padding:24px;max-width:600px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+        .ad-form h3{font-size:16px;margin-bottom:16px;color:#2c3e50}
+        .form-row{margin-bottom:12px}
+        .form-row label{display:block;font-size:12px;font-weight:700;color:#888;margin-bottom:4px;text-transform:uppercase}
+        .form-row input,.form-row select,.form-row textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:4px;background:#fff;color:#222;font-family:inherit;font-size:13px}
+        .form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:none;border-color:#2c3e50}
+        .form-row textarea{min-height:80px;resize:vertical}
+        .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .chk-row{display:flex;flex-wrap:wrap;gap:8px}
+        .chk-row label{font-size:12px;color:#555;cursor:pointer;display:flex;align-items:center;gap:4px;font-weight:400;text-transform:none}
+
+        .settings-box{background:#fff;border:1px solid #ddd;border-radius:8px;padding:24px;max-width:500px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+        .settings-box h3{font-size:16px;margin-bottom:16px;color:#2c3e50}
+
+        .log-list{max-height:400px;overflow-y:auto}
+        .log-item{padding:8px 12px;border-bottom:1px solid #eee;font-size:12px;display:flex;gap:8px}
+        .log-time{color:#888;white-space:nowrap}
+        .log-action{color:#e74c3c;font-weight:700}
+
+        .toast{position:fixed;bottom:20px;right:20px;background:#27ae60;color:#fff;padding:12px 24px;border-radius:6px;font-size:13px;font-weight:700;opacity:0;transform:translateY(20px);transition:all .3s;z-index:9999}
+        .toast.show{opacity:1;transform:translateY(0)}
+        .toast.error{background:#e74c3c}
+
+        .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:center;justify-content:center}
+        .modal-overlay.show{display:flex}
+        .modal{background:#fff;border-radius:8px;padding:24px;max-width:600px;width:95%;max-height:90vh;overflow-y:auto;box-shadow:0 8px 30px rgba(0,0,0,.2)}
+        .modal h3{font-size:16px;margin-bottom:16px;color:#2c3e50;display:flex;justify-content:space-between;align-items:center}
+        .modal .close-btn{background:none;border:none;font-size:20px;cursor:pointer;color:#888;padding:4px 8px}
+        .modal .close-btn:hover{color:#e74c3c}
+
+        @media(max-width:768px){
+            .form-grid{grid-template-columns:1fr}
+            .admin-body{padding:12px}
+            .ad-table{font-size:12px}
+            .ad-table th,.ad-table td{padding:6px 8px}
+            .ad-desc{max-width:150px}
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrap" id="loginWrap">
+        <div class="login-box">
+            <h1>SeksiKuulutused.com Admin</h1>
+            <p>Logige sisse halduspaneeli</p>
+            <div class="login-err" id="loginErr">Vale parool</div>
+            <input type="password" id="loginPass" placeholder="Parool" onkeydown="if(event.key==='Enter')doLogin()">
+            <button onclick="doLogin()">Sisselogimine</button>
+        </div>
+    </div>
+
+    <div class="admin-wrap" id="adminWrap">
+        <div class="admin-topbar">
+            <h1>Admin Panel <span>| SeksiKuulutused.com</span></h1>
+            <div class="admin-actions">
+                <a href="index.html" class="btn btn-blue">Vaata lehte</a>
+                <button class="btn btn-red" onclick="doLogout()">Logi v&auml;lja</button>
+            </div>
+        </div>
+
+        <div class="admin-body">
+            <div class="stats-grid" id="statsGrid">
+                <div class="stat-card"><div class="num" id="aTotal">0</div><div class="label">Kuulutused kokku</div></div>
+                <div class="stat-card"><div class="num" id="aVip">0</div><div class="label">VIP kuulutused</div></div>
+                <div class="stat-card"><div class="num" id="aToday">0</div><div class="label">Uued t&auml;na</div></div>
+                <div class="stat-card"><div class="num" id="aReported">0</div><div class="label">Teatatud</div></div>
+                <div class="stat-card"><div class="num" id="aViews">0</div><div class="label">Vaatamised t&auml;na</div></div>
+                <div class="stat-card"><div class="num" id="aViewsTotal">0</div><div class="label">Vaatamised kokku</div></div>
+            </div>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('ads',this)">Kuulutused</button>
+                <button class="tab" onclick="switchTab('create',this)">Loo kuulutus</button>
+                <button class="tab" onclick="switchTab('settings',this)">Seaded</button>
+                <button class="tab" onclick="switchTab('reports',this)">Teated</button>
+                <button class="tab" onclick="switchTab('messages',this)">S&otilde;numid</button>
+                <button class="tab" onclick="switchTab('regions',this)">Piirkonnad</button>
+                <button class="tab" onclick="switchTab('log',this)">Logi</button>
+            </div>
+
+            <div class="panel active" id="panelAds">
+                <div class="toolbar">
+                    <input type="text" id="adSearch" placeholder="Otsi kuulutustest..." oninput="filterAds()">
+                    <select id="adFilter" onchange="filterAds()">
+                        <option value="">K&otilde;ik</option>
+                        <option value="vip">Ainult VIP</option>
+                        <option value="reported">Teatatud</option>
+                        <option value="today">Uued t&auml;na</option>
+                        <option value="mees-otsib">Mees otsib</option>
+                        <option value="naine-pakub">Naine pakub</option>
+                        <option value="naine-otsib">Naine otsib</option>
+                        <option value="mees-mees">Mehed omavahel</option>
+                        <option value="naine-naine">Naised omavahel</option>
+                        <option value="paarid">Paarid</option>
+                        <option value="massaaz">Massaa&zcaron;</option>
+                    </select>
+                    <select id="adRegion" onchange="filterAds()">
+                        <option value="">K&otilde;ik piirkonnad</option>
+                        <option>Harju</option>
+                        <option>Tartu</option>
+                        <option>Ida-Viru</option>
+                        <option>P&auml;rnu</option>
+                        <option>L&auml;&auml;ne-Viru</option>
+                        <option>Viljandi</option>
+                        <option>Rapla</option>
+                        <option>V&otilde;ru</option>
+                        <option>Saare</option>
+                        <option>J&otilde;geva</option>
+                        <option>J&auml;rva</option>
+                        <option>Valga</option>
+                        <option>P&otilde;lva</option>
+                        <option>L&auml;&auml;ne</option>
+                        <option>Hiiu</option>
+                    </select>
+                </div>
+                <div class="bulk-bar" id="bulkBar">
+                    <span><strong id="bulkCount">0</strong> valitud</span>
+                    <button class="btn btn-orange btn-sm" onclick="bulkVip()">Hulgi VIP</button>
+                    <button class="btn btn-blue btn-sm" onclick="bulkUnvip()">Hulgi eemalda VIP</button>
+                    <button class="btn btn-red btn-sm" onclick="bulkDelete()">Hulgi kustuta</button>
+                    <button class="btn btn-sm" style="background:#555;color:#fff" onclick="clearSelection()">T&uuml;hista</button>
+                </div>
+                <div style="overflow-x:auto">
+                    <table class="ad-table">
+                        <thead><tr>
+                            <th><input type="checkbox" class="chk" id="checkAll" onchange="toggleAll(this)"></th>
+                            <th>ID</th>
+                            <th>Vanus</th>
+                            <th>Linn / Piirkond</th>
+                            <th>T&uuml;&uuml;p</th>
+                            <th>Kirjeldus</th>
+                            <th>Kontakt</th>
+                            <th>Loodud</th>
+                            <th>Vaatamised</th>
+                            <th>Tegevused</th>
+                        </tr></thead>
+                        <tbody id="adTableBody"></tbody>
+                    </table>
+                </div>
+                <div style="text-align:center;padding:16px;color:#888;font-size:12px" id="adCount"></div>
+            </div>
+
+            <div class="panel" id="panelCreate">
+                <div class="ad-form">
+                    <h3>Loo uus kuulutus (admin)</h3>
+                    <div class="form-grid">
+                        <div class="form-row"><label>H&uuml;&uuml;dnimi</label><input type="text" id="cNick" maxlength="30" placeholder="Nt. Lahe28"></div>
+                        <div class="form-row"><label>Vanus *</label><input type="number" id="cAge" min="18" max="70" placeholder="28"></div>
+                        <div class="form-row"><label>Piirkond *</label><select id="cRegion" onchange="updAdminCities()"><option value="">Vali</option><option>Harju</option><option>Tartu</option><option>Ida-Viru</option><option>P&auml;rnu</option><option>L&auml;&auml;ne-Viru</option><option>Viljandi</option><option>Rapla</option><option>V&otilde;ru</option><option>Saare</option><option>J&otilde;geva</option><option>J&auml;rva</option><option>Valga</option><option>P&otilde;lva</option><option>L&auml;&auml;ne</option><option>Hiiu</option></select></div>
+                        <div class="form-row"><label>Linn</label><select id="cCity"><option value="">Vali esmalt piirkond</option></select></div>
+                        <div class="form-row"><label>T&uuml;&uuml;p</label><select id="cType"><option value="mees-otsib">Mees otsib</option><option value="naine-pakub">Naine pakub</option><option value="naine-otsib">Naine otsib</option><option value="mees-mees">Mehed omavahel</option><option value="naine-naine">Naised omavahel</option><option value="paarid">Paarid</option><option value="massaaz">Massaa&zcaron;</option></select></div>
+                        <div class="form-row"><label>Pikkus (cm)</label><input type="number" id="cHeight" min="100" max="250" placeholder="180"></div>
+                        <div class="form-row"><label>Kaal (kg)</label><input type="number" id="cWeight" min="30" max="300" placeholder="75"></div>
+                        <div class="form-row"><label>WhatsApp</label><input type="text" id="cWa" placeholder="+372 5123 4567"></div>
+                        <div class="form-row"><label>Viber</label><input type="text" id="cVb" placeholder="+372 5123 4567"></div>
+                        <div class="form-row"><label>E-post</label><input type="email" id="cEm" placeholder="email@example.ee"></div>
+                    </div>
+                    <div class="form-row"><label>Kirjeldus *</label><textarea id="cDesc" placeholder="Kuulutuse tekst..."></textarea></div>
+                    <div class="form-row"><label>Tegevused</label><div class="chk-row" id="cActs"></div></div>
+                    <div class="form-row"><label>Asukoht</label><div class="chk-row" id="cLocs"></div></div>
+                    <div class="form-row">
+                        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;text-transform:none;color:#f39c12">
+                            <input type="checkbox" id="cVip"> Loo VIP kuulutusena
+                        </label>
+                    </div>
+                    <button class="btn btn-green" style="width:100%;padding:12px;font-size:14px" onclick="createAd()">Loo kuulutus</button>
+                </div>
+
+                <div class="ad-form" style="margin-top:24px;border-color:#e91e63">
+                    <h3 style="color:#e91e63">Lisa kuulutus</h3>
+                    <div class="form-grid">
+                        <div class="form-row"><label>H&uuml;&uuml;dnimi</label><input type="text" id="tNick" maxlength="30" placeholder="Nt. Mia28"></div>
+                        <div class="form-row"><label>Vanus *</label><input type="number" id="tAge" min="18" max="70" placeholder="28"></div>
+                        <div class="form-row"><label>Piirkond *</label><select id="tRegion" onchange="updTransCities()"><option value="">Vali</option><option>Harju</option><option>Tartu</option><option>Ida-Viru</option><option>P&auml;rnu</option><option>L&auml;&auml;ne-Viru</option><option>Viljandi</option><option>Rapla</option><option>V&otilde;ru</option><option>Saare</option><option>J&otilde;geva</option><option>J&auml;rva</option><option>Valga</option><option>P&otilde;lva</option><option>L&auml;&auml;ne</option><option>Hiiu</option></select></div>
+                        <div class="form-row"><label>Linn</label><select id="tCity"><option value="">Vali esmalt piirkond</option></select></div>
+                        <div class="form-row"><label>Pikkus (cm)</label><input type="number" id="tHeight" min="100" max="250" placeholder="170"></div>
+                        <div class="form-row"><label>Kaal (kg)</label><input type="number" id="tWeight" min="30" max="300" placeholder="65"></div>
+                        <div class="form-row"><label>WhatsApp</label><input type="text" id="tWa" placeholder="+372 5123 4567"></div>
+                        <div class="form-row"><label>Viber</label><input type="text" id="tVb" placeholder="+372 5123 4567"></div>
+                        <div class="form-row"><label>E-post</label><input type="email" id="tEm" placeholder="email@example.ee"></div>
+                    </div>
+                    <div class="form-row"><label>Kirjeldus *</label><textarea id="tDesc" placeholder="Kuulutuse tekst..."></textarea></div>
+                    <div class="form-row"><label>Tegevused</label><div class="chk-row" id="tActs"></div></div>
+                    <div class="form-row"><label>Asukoht</label><div class="chk-row" id="tLocs"></div></div>
+                    <div class="form-row">
+                        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;text-transform:none;color:#f39c12">
+                            <input type="checkbox" id="tVip"> Loo VIP kuulutusena
+                        </label>
+                    </div>
+                    <button class="btn" style="width:100%;padding:12px;font-size:14px;background:#e91e63;color:#fff" onclick="createTransAd()">Loo kuulutus</button>
+                </div>
+            </div>
+
+            <div class="panel" id="panelSettings">
+                <div class="settings-box">
+                    <h3>Admini parool</h3>
+                    <div class="form-row"><label>Vana parool</label><input type="password" id="sOldPass"></div>
+                    <div class="form-row"><label>Uus parool</label><input type="password" id="sNewPass"></div>
+                    <button class="btn btn-green" onclick="changePass()">Muuda parooli</button>
+                </div>
+                <div class="settings-box">
+                    <h3>Andmed</h3>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap">
+                        <button class="btn btn-blue" onclick="exportData()">Ekspordi kuulutused (JSON)</button>
+                        <button class="btn btn-blue" onclick="exportCSV()">Ekspordi (CSV)</button>
+                        <button class="btn btn-orange" onclick="importData()">Impordi kuulutused</button>
+                        <button class="btn btn-red" onclick="clearAllAds()">Kustuta k&otilde;ik kuulutused</button>
+                    </div>
+                    <input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
+                </div>
+                <div class="settings-box">
+                    <h3>Lehe seaded</h3>
+                    <div class="form-row"><label>Tugi e-post</label><input type="email" id="sSupportEmail" value="info@seksikuulutused.com"></div>
+                    <button class="btn btn-green" onclick="saveSettings()">Salvesta seaded</button>
+                </div>
+                <div class="settings-box">
+                    <h3>Testandmed</h3>
+                    <p style="font-size:12px;color:#888;margin-bottom:12px">Genereeri v&auml;ljakuulutused testimiseks/demoks</p>
+                    <button class="btn btn-orange" onclick="seedData()">Genereeri 50 testkuulutust</button>
+                </div>
+            </div>
+
+            <div class="panel" id="panelReports">
+                <div id="reportsList" style="max-height:500px;overflow-y:auto"></div>
+            </div>
+
+            <div class="panel" id="panelMessages">
+                <div id="messagesList" style="max-height:500px;overflow-y:auto"></div>
+            </div>
+
+            <div class="panel" id="panelRegions">
+                <div id="regionStats"></div>
+            </div>
+
+            <div class="panel" id="panelLog">
+                <div class="log-list" id="logList"></div>
+                <div style="margin-top:12px"><button class="btn btn-red btn-sm" onclick="clearLog()">T&uuml;hjenda logi</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <h3><span>Muuda kuulutust #<span id="eId"></span></span><button class="close-btn" onclick="closeEdit()">&times;</button></h3>
+            <input type="hidden" id="eAdId">
+            <div class="form-grid">
+                <div class="form-row"><label>H&uuml;&uuml;dnimi</label><input type="text" id="eNick" maxlength="30"></div>
+                <div class="form-row"><label>Vanus</label><input type="number" id="eAge" min="18" max="99"></div>
+                <div class="form-row"><label>Piirkond</label><select id="eRegion" onchange="updEditCities()"><option value="">Vali</option><option>Harju</option><option>Tartu</option><option>Ida-Viru</option><option>P&auml;rnu</option><option>L&auml;&auml;ne-Viru</option><option>Viljandi</option><option>Rapla</option><option>V&otilde;ru</option><option>Saare</option><option>J&otilde;geva</option><option>J&auml;rva</option><option>Valga</option><option>P&otilde;lva</option><option>L&auml;&auml;ne</option><option>Hiiu</option></select></div>
+                <div class="form-row"><label>Linn</label><select id="eCity"><option value="">-</option></select></div>
+                <div class="form-row"><label>T&uuml;&uuml;p</label><select id="eType"><option value="mees-otsib">Mees otsib</option><option value="naine-pakub">Naine pakub</option><option value="naine-otsib">Naine otsib</option><option value="mees-mees">Mehed omavahel</option><option value="naine-naine">Naised omavahel</option><option value="paarid">Paarid</option><option value="massaaz">Massaa&zcaron;</option></select></div>
+                <div class="form-row"><label>Pikkus (cm)</label><input type="number" id="eHeight" min="100" max="250"></div>
+                <div class="form-row"><label>Kaal (kg)</label><input type="number" id="eWeight" min="30" max="300"></div>
+                <div class="form-row"><label>WhatsApp</label><input type="text" id="eWa"></div>
+                <div class="form-row"><label>Viber</label><input type="text" id="eVb"></div>
+                <div class="form-row"><label>E-post</label><input type="email" id="eEm"></div>
+            </div>
+            <div class="form-row"><label>Kirjeldus</label><textarea id="eDesc"></textarea></div>
+            <div class="form-row"><label>Tegevused</label><div class="chk-row" id="eActs"></div></div>
+            <div class="form-row"><label>Asukoht</label><div class="chk-row" id="eLocs"></div></div>
+            <div style="display:flex;gap:8px;margin-top:16px">
+                <button class="btn btn-green" style="flex:1;padding:12px" onclick="saveEdit()">Salvesta muudatused</button>
+                <button class="btn btn-red" style="padding:12px" onclick="closeEdit()">T&uuml;hista</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+    // === CONFIG ===
+    var API='/.netlify/functions/admin';
+    var adminPass='';
+
+    var C={'Harju':['Tallinn','Maardu','Keila','Saue','Paldiski'],'Tartu':['Tartu','Elva'],'Ida-Viru':['Narva','Kohtla-J\u00e4rve','J\u00f5hvi','Sillam\u00e4e','Kivi\u00f5li'],'P\u00e4rnu':['P\u00e4rnu','Sindi'],'L\u00e4\u00e4ne-Viru':['Rakvere','Tapa','Kunda'],'Viljandi':['Viljandi','P\u00f5ltsamaa'],'Rapla':['Rapla'],'V\u00f5ru':['V\u00f5ru'],'Saare':['Kuressaare'],'J\u00f5geva':['J\u00f5geva'],'J\u00e4rva':['Paide','T\u00fcri'],'Valga':['Valga','T\u00f5rva'],'P\u00f5lva':['P\u00f5lva'],'L\u00e4\u00e4ne':['Haapsalu'],'Hiiu':['K\u00e4rdla']};
+    var ACTS=['Suuseks','Anaal','Massaa\u017e','Suudlemine','Fetish','BDSM','69','Domineerimine','Vestlus','Webcam','Vanemad','Tutvumine'];
+    var LOCS=['Oma koht','Auto','Hotell','V\u00e4ljas','Saan reisida'];
+    var TL={'mees-otsib':'Mees otsib','naine-pakub':'Naine pakub','naine-otsib':'Naine otsib','mees-mees':'Mehed omavahel','naine-naine':'Naised omavahel','paarid':'Paarid','massaaz':'Massaa\u017e'};
+
+    // Cached data
+    var cachedAds=[];
+
+    // === API helper ===
+    function api(body){
+        return fetch(API,{method:'POST',headers:{'Content-Type':'application/json','x-admin-pass':adminPass},body:JSON.stringify(body)}).then(function(r){
+            if(r.status===401){toast('Volitamata ligip\u00e4\u00e4s',true);doLogout();throw new Error('Unauthorized');}
+            return r.json();
+        });
+    }
+
+    // === AUTH ===
+    function doLogin(){
+        var pass=document.getElementById('loginPass').value;
+        adminPass=pass;
+        api({action:'login'}).then(function(res){
+            if(res.ok){
+                sessionStorage.setItem('sk_admin_pass',pass);
+                document.getElementById('loginWrap').style.display='none';
+                document.getElementById('adminWrap').classList.add('active');
+                initAdmin();
+            } else {
+                document.getElementById('loginErr').style.display='block';
+                adminPass='';
+            }
+        }).catch(function(){
+            document.getElementById('loginErr').style.display='block';
+            adminPass='';
+        });
+    }
+    function doLogout(){
+        sessionStorage.removeItem('sk_admin_pass');
+        adminPass='';
+        location.reload();
+    }
+    function checkSession(){
+        var saved=sessionStorage.getItem('sk_admin_pass');
+        if(saved){
+            adminPass=saved;
+            api({action:'login'}).then(function(res){
+                if(res.ok){
+                    document.getElementById('loginWrap').style.display='none';
+                    document.getElementById('adminWrap').classList.add('active');
+                    initAdmin();
+                }
+            }).catch(function(){});
+        }
+    }
+
+    // === TOAST ===
+    function toast(msg,isError){
+        var t=document.getElementById('toast');
+        t.textContent=msg;
+        t.className='toast'+(isError?' error':'')+' show';
+        setTimeout(function(){t.classList.remove('show')},3000);
+    }
+
+    // === TABS ===
+    function switchTab(id,btn){
+        document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+        document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')});
+        document.getElementById('panel'+id.charAt(0).toUpperCase()+id.slice(1)).classList.add('active');
+        btn.classList.add('active');
+        if(id==='log')fetchLog();
+        if(id==='reports')fetchReports();
+        if(id==='messages')fetchMessages();
+        if(id==='regions')renderRegionStats();
+    }
+
+    // === INIT ===
+    function initAdmin(){
+        buildCheckboxes();
+        fetchAds();
+        fetchLog();
+        fetchSettings();
+        fetchViews();
+    }
+
+    function buildCheckboxes(){
+        var actsHtml='',locsHtml='';
+        ACTS.forEach(function(a){actsHtml+='<label><input type="checkbox" value="'+a+'"> '+a+'</label>'});
+        LOCS.forEach(function(l){locsHtml+='<label><input type="checkbox" value="'+l+'"> '+l+'</label>'});
+        document.getElementById('cActs').innerHTML=actsHtml;
+        document.getElementById('cLocs').innerHTML=locsHtml;
+        document.getElementById('tActs').innerHTML=actsHtml;
+        document.getElementById('tLocs').innerHTML=locsHtml;
+    }
+
+    function updAdminCities(){
+        var reg=document.getElementById('cRegion').value;
+        var sel=document.getElementById('cCity');
+        sel.innerHTML='<option value="">K\u00f5ik linnad</option>';
+        if(reg&&C[reg])C[reg].forEach(function(c){sel.innerHTML+='<option>'+c+'</option>'});
+    }
+
+    // === FETCH DATA ===
+    function fetchAds(){
+        api({action:'getAds'}).then(function(ads){
+            cachedAds=ads;
+            refreshStats();
+            renderAds();
+        }).catch(function(){toast('Viga kuulutuste laadimisel',true)});
+    }
+
+    function fetchViews(){
+        fetch('/.netlify/functions/counter').then(function(r){return r.json()}).then(function(d){
+            document.getElementById('aViews').textContent=(d.today||0).toLocaleString('et');
+            document.getElementById('aViewsTotal').textContent=(d.total||0).toLocaleString('et');
+        }).catch(function(){});
+    }
+
+    function fetchSettings(){
+        api({action:'getSettings'}).then(function(s){
+            if(s.supportEmail)document.getElementById('sSupportEmail').value=s.supportEmail;
+        }).catch(function(){});
+    }
+
+    function fetchLog(){
+        api({action:'getLog'}).then(function(log){
+            renderLogData(log);
+        }).catch(function(){});
+    }
+
+    // === STATS ===
+    function refreshStats(){
+        var ads=cachedAds;
+        var td=new Date();td.setHours(0,0,0,0);
+        var today=0,vip=0,reported=0;
+        ads.forEach(function(a){
+            if(new Date(a.ts)>=td)today++;
+            if(a.vip)vip++;
+            if(a.reported)reported++;
+        });
+        document.getElementById('aTotal').textContent=ads.length;
+        document.getElementById('aVip').textContent=vip;
+        document.getElementById('aToday').textContent=today;
+        document.getElementById('aReported').textContent=reported;
+    }
+
+    // === ADS TABLE ===
+    var selected=[];
+    function renderAds(){
+        var ads=cachedAds;
+        var q=(document.getElementById('adSearch').value||'').toLowerCase();
+        var f=document.getElementById('adFilter').value;
+        var reg=document.getElementById('adRegion').value;
+        var td=new Date();td.setHours(0,0,0,0);
+
+        var filtered=ads.filter(function(a){
+            if(q&&a.d.toLowerCase().indexOf(q)===-1&&(a.wa||'').indexOf(q)===-1&&(a.ct||'').toLowerCase().indexOf(q)===-1)return false;
+            if(f==='vip'&&!a.vip)return false;
+            if(f==='reported'&&!a.reported)return false;
+            if(f==='today'&&new Date(a.ts)<td)return false;
+            if(Object.keys(TL).indexOf(f)>-1&&a.tp!==f)return false;
+            if(reg&&a.rk!==reg)return false;
+            return true;
+        });
+
+        var tbody=document.getElementById('adTableBody');
+        if(!filtered.length){
+            tbody.innerHTML='<tr><td colspan="10" style="text-align:center;color:#888;padding:30px">Kuulutusi ei leitud</td></tr>';
+            document.getElementById('adCount').textContent='0 kuulutust';
+            return;
+        }
+
+        tbody.innerHTML=filtered.map(function(a){
+            var cls='';
+            if(a.vip)cls=' vip-row';
+            if(a.reported)cls=' reported-row';
+            var isChecked=selected.indexOf(a.id)>-1;
+            var dt=new Date(a.ts);
+            var dateStr=dt.getDate()+'/'+(dt.getMonth()+1)+' '+dt.getHours().toString().padStart(2,'0')+':'+dt.getMinutes().toString().padStart(2,'0');
+            return'<tr class="'+cls+'">'+
+                '<td><input type="checkbox" class="chk" '+(isChecked?'checked':'')+' onchange="toggleSelect('+a.id+',this)"></td>'+
+                '<td>#'+a.id+'</td>'+
+                '<td>'+(a.nick?'<strong>'+a.nick+'</strong><br>':'')+a.age+(a.height?' &middot; '+a.height+'cm':'')+(a.weight?' &middot; '+a.weight+'kg':'')+'</td>'+
+                '<td>'+(a.ct||'-')+'<br><small style="color:#666">'+a.rk+'</small></td>'+
+                '<td><span class="badge badge-type">'+(TL[a.tp]||a.tp)+'</span>'+(a.vip?' <span class="badge badge-vip">VIP</span>':'')+(a.reported?' <span class="badge badge-reported">!</span>':'')+'</td>'+
+                '<td class="ad-desc" title="'+a.d.replace(/"/g,'&quot;')+'">'+a.d+'</td>'+
+                '<td class="contact-info">'+(a.wa?'<a href="https://wa.me/'+a.wa.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent('Tere, n\u00e4gin sinu kuulutust seksikuulutused.com lehel')+'">WA: '+a.wa+'</a><br>':'')+(a.vb?'VB: '+a.vb+'<br>':'')+(a.em||'')+'</td>'+
+                '<td>'+dateStr+'</td>'+
+                '<td>'+(a.views||0)+'</td>'+
+                '<td style="white-space:nowrap">'+
+                    '<button class="btn btn-blue btn-sm" onclick="openEdit('+a.id+')">Muuda</button> '+
+                    (a.vip?'<button class="btn btn-sm" style="background:#555;color:#fff" onclick="toggleVip('+a.id+')">-VIP</button>':'<button class="btn btn-orange btn-sm" onclick="toggleVip('+a.id+')">+VIP</button>')+
+                    ' <button class="btn btn-red btn-sm" onclick="deleteAd('+a.id+')">Kustuta</button>'+
+                    (a.reported?' <button class="btn btn-green btn-sm" onclick="clearReport('+a.id+')">OK</button>':'')+
+                '</td></tr>';
+        }).join('');
+        document.getElementById('adCount').textContent=filtered.length+' / '+ads.length+' kuulutust';
+    }
+
+    function filterAds(){renderAds()}
+
+    function toggleSelect(id,el){
+        if(el.checked){if(selected.indexOf(id)===-1)selected.push(id)}
+        else{selected=selected.filter(function(s){return s!==id})}
+        updateBulk();
+    }
+    function toggleAll(el){
+        var chks=document.querySelectorAll('#adTableBody .chk');
+        selected=[];
+        if(el.checked)chks.forEach(function(c){c.checked=true;var tr=c.closest('tr');var id=parseInt(tr.children[1].textContent.replace('#',''));selected.push(id)});
+        else chks.forEach(function(c){c.checked=false});
+        updateBulk();
+    }
+    function clearSelection(){selected=[];document.getElementById('checkAll').checked=false;renderAds();updateBulk()}
+    function updateBulk(){
+        var bar=document.getElementById('bulkBar');
+        if(selected.length){bar.classList.add('show');document.getElementById('bulkCount').textContent=selected.length}
+        else bar.classList.remove('show');
+    }
+
+    function toggleVip(id){
+        api({action:'toggleVip',id:id}).then(function(res){
+            if(res.ok){toast(res.vip?'VIP lisatud #'+id:'VIP eemaldatud #'+id);fetchAds();}
+        }).catch(function(){toast('Viga',true)});
+    }
+
+    function deleteAd(id){
+        if(!confirm('Kustutada kuulutus #'+id+'?'))return;
+        api({action:'deleteAd',id:id}).then(function(res){
+            if(res.ok){toast('Kuulutus #'+id+' kustutatud');fetchAds();}
+        }).catch(function(){toast('Viga',true)});
+    }
+
+    function clearReport(id){
+        api({action:'clearReport',id:id}).then(function(res){
+            if(res.ok){toast('Teade eemaldatud #'+id);fetchAds();}
+        }).catch(function(){toast('Viga',true)});
+    }
+
+    function bulkVip(){
+        api({action:'bulkVip',ids:selected}).then(function(res){
+            if(res.ok){toast(selected.length+' kuulutust m\u00e4rgitud VIP-ks');clearSelection();fetchAds();}
+        }).catch(function(){toast('Viga',true)});
+    }
+    function bulkUnvip(){
+        api({action:'bulkUnvip',ids:selected}).then(function(res){
+            if(res.ok){toast('VIP eemaldatud '+selected.length+' kuulutuselt');clearSelection();fetchAds();}
+        }).catch(function(){toast('Viga',true)});
+    }
+    function bulkDelete(){
+        if(!confirm('Kustutada '+selected.length+' kuulutust?'))return;
+        api({action:'bulkDelete',ids:selected}).then(function(res){
+            if(res.ok){toast(selected.length+' kuulutust kustutatud');clearSelection();fetchAds();}
+        }).catch(function(){toast('Viga',true)});
+    }
+
+    // === CREATE AD ===
+    function createAd(){
+        var age=parseInt(document.getElementById('cAge').value);
+        var reg=document.getElementById('cRegion').value;
+        var ct=document.getElementById('cCity').value;
+        var tp=document.getElementById('cType').value;
+        var wa=document.getElementById('cWa').value;
+        var vb=document.getElementById('cVb').value;
+        var em=document.getElementById('cEm').value;
+        var desc=document.getElementById('cDesc').value;
+        var vip=document.getElementById('cVip').checked;
+        var height=parseInt(document.getElementById('cHeight').value)||0;
+        var weight=parseInt(document.getElementById('cWeight').value)||0;
+
+        if(!age||age<18){toast('Sisestage kehtiv vanus (18+)',true);return}
+        if(!desc){toast('Sisestage kirjeldus',true);return}
+
+        var acts=[],locs=[];
+        document.querySelectorAll('#cActs input:checked').forEach(function(c){acts.push(c.value)});
+        document.querySelectorAll('#cLocs input:checked').forEach(function(c){locs.push(c.value)});
+
+        toast('Kuulutuse loomine...');
+        var nick=document.getElementById('cNick').value;
+        api({action:'createAd',nick:nick||'',age:age,height:height,weight:weight,rk:reg||'Harju',ct:ct||'',wa:wa||'',vb:vb||'',em:em||'',d:desc,tp:tp||'mees-otsib',acts:acts,locs:locs,vip:vip}).then(function(res){
+            if(res.ok){
+                toast('Kuulutus #'+res.ad.id+' loodud!'+(vip?' (VIP)':''));
+                document.getElementById('cNick').value='';
+                document.getElementById('cAge').value='';
+                document.getElementById('cRegion').value='';
+                document.getElementById('cCity').innerHTML='<option value="">Vali esmalt piirkond</option>';
+                document.getElementById('cType').value='mees-otsib';
+                document.getElementById('cWa').value='';
+                document.getElementById('cVb').value='';
+                document.getElementById('cEm').value='';
+                document.getElementById('cHeight').value='';
+                document.getElementById('cWeight').value='';
+                document.getElementById('cDesc').value='';
+                document.getElementById('cVip').checked=false;
+                document.querySelectorAll('#cActs input,#cLocs input').forEach(function(c){c.checked=false});
+                fetchAds();
+                switchTab('ads',document.querySelector('.tab'));
+            } else {toast(res.error||'Viga',true);}
+        }).catch(function(){toast('V\u00f5rguviga',true)});
+    }
+
+    // === CREATE TRANS AD ===
+    function updTransCities(){
+        var reg=document.getElementById('tRegion').value;
+        var sel=document.getElementById('tCity');
+        sel.innerHTML='<option value="">K\u00f5ik linnad</option>';
+        if(reg&&C[reg])C[reg].forEach(function(c){sel.innerHTML+='<option>'+c+'</option>'});
+    }
+    function createTransAd(){
+        var age=parseInt(document.getElementById('tAge').value);
+        if(!age||age<18){toast('Sisestage kehtiv vanus (18+)',true);return}
+        var desc=document.getElementById('tDesc').value;
+        if(!desc){toast('Sisestage kirjeldus',true);return}
+        var acts=[],locs=[];
+        document.querySelectorAll('#tActs input:checked').forEach(function(c){acts.push(c.value)});
+        document.querySelectorAll('#tLocs input:checked').forEach(function(c){locs.push(c.value)});
+        var vip=document.getElementById('tVip').checked;
+        toast('Kuulutuse loomine...');
+        api({action:'createAd',nick:document.getElementById('tNick').value||'',age:age,height:parseInt(document.getElementById('tHeight').value)||0,weight:parseInt(document.getElementById('tWeight').value)||0,rk:document.getElementById('tRegion').value||'Harju',ct:document.getElementById('tCity').value||'',wa:document.getElementById('tWa').value||'',vb:document.getElementById('tVb').value||'',em:document.getElementById('tEm').value||'',d:desc,tp:'mees-otsib',acts:acts,locs:locs,vip:vip}).then(function(res){
+            if(res.ok){
+                toast('Kuulutus #'+res.ad.id+' loodud!'+(vip?' (VIP)':''));
+                document.getElementById('tNick').value='';
+                document.getElementById('tAge').value='';
+                document.getElementById('tRegion').value='';
+                document.getElementById('tCity').innerHTML='<option value="">Vali esmalt piirkond</option>';
+                document.getElementById('tWa').value='';
+                document.getElementById('tVb').value='';
+                document.getElementById('tEm').value='';
+                document.getElementById('tHeight').value='';
+                document.getElementById('tWeight').value='';
+                document.getElementById('tDesc').value='';
+                document.getElementById('tVip').checked=false;
+                document.querySelectorAll('#tActs input,#tLocs input').forEach(function(c){c.checked=false});
+                fetchAds();
+                switchTab('ads',document.querySelector('.tab'));
+            } else {toast(res.error||'Viga',true);}
+        }).catch(function(){toast('V\u00f5rguviga',true)});
+    }
+
+    // === SETTINGS ===
+    function changePass(){
+        var old=document.getElementById('sOldPass').value;
+        var np=document.getElementById('sNewPass').value;
+        if(!old||!np){toast('T\u00e4itke m\u00f5lemad v\u00e4ljad',true);return}
+        api({action:'changePass',oldPass:old,newPass:np}).then(function(res){
+            if(res.ok){
+                toast('Parool muudetud!');
+                adminPass=np;
+                sessionStorage.setItem('sk_admin_pass',np);
+                document.getElementById('sOldPass').value='';
+                document.getElementById('sNewPass').value='';
+            } else {toast(res.error||'Viga',true);}
+        }).catch(function(){toast('Viga',true)});
+    }
+
+    function saveSettings(){
+        var s={supportEmail:document.getElementById('sSupportEmail').value};
+        api({action:'saveSettings',settings:s}).then(function(res){
+            if(res.ok)toast('Seaded salvestatud!');
+        }).catch(function(){toast('Viga',true)});
+    }
+
+    function exportData(){
+        var ads=cachedAds;
+        var blob=new Blob([JSON.stringify(ads,null,2)],{type:'application/json'});
+        var url=URL.createObjectURL(blob);
+        var a=document.createElement('a');a.href=url;a.download='seksikuulutused_ads_'+new Date().toISOString().split('T')[0]+'.json';a.click();
+        URL.revokeObjectURL(url);
+        toast('Eksporditud '+ads.length+' kuulutust');
+    }
+
+    function exportCSV(){
+        var ads=cachedAds;
+        var csv='ID,Vanus,Piirkond,Linn,T\u00fc\u00fcp,WhatsApp,E-post,Kirjeldus,VIP,Loodud,Vaatamised\n';
+        ads.forEach(function(a){
+            csv+=a.id+','+a.age+',"'+a.rk+'","'+(a.ct||'')+'",'+a.tp+',"'+(a.wa||'')+'","'+(a.em||'')+'","'+a.d.replace(/"/g,'""')+'",'+!!a.vip+','+a.ts+','+(a.views||0)+'\n';
+        });
+        var blob=new Blob([csv],{type:'text/csv'});
+        var url=URL.createObjectURL(blob);
+        var a=document.createElement('a');a.href=url;a.download='seksikuulutused_ads_'+new Date().toISOString().split('T')[0]+'.csv';a.click();
+        URL.revokeObjectURL(url);
+        toast('CSV eksporditud');
+    }
+
+    function importData(){document.getElementById('importFile').click()}
+    function handleImport(e){
+        var file=e.target.files[0];if(!file)return;
+        var reader=new FileReader();
+        reader.onload=function(ev){
+            try{
+                var data=JSON.parse(ev.target.result);
+                if(!Array.isArray(data)){toast('Vigane fail',true);return}
+                toast('Importimine '+data.length+' kuulutust...');
+                api({action:'seed',ads:data}).then(function(res){
+                    if(res.ok){toast(res.count+' kuulutust imporditud!');fetchAds();}
+                    else toast(res.error||'Viga',true);
+                }).catch(function(){toast('Viga importimisel',true)});
+            }catch(err){toast('Viga importimisel: '+err.message,true)}
+        };
+        reader.readAsText(file);
+        e.target.value='';
+    }
+
+    function clearAllAds(){
+        if(!confirm('HOIATUS: Kustutada K\u00d5IK kuulutused? Seda ei saa tagasi v\u00f5tta!'))return;
+        if(!confirm('Kas olete t\u00e4iesti kindel?'))return;
+        api({action:'clearAll'}).then(function(res){
+            if(res.ok){toast('K\u00f5ik kuulutused kustutatud');fetchAds();}
+        }).catch(function(){toast('Viga',true)});
+    }
+
+    // === SEED TEST DATA ===
+    function seedData(){
+        if(!confirm('Genereerida 50 testkuulutust?'))return;
+        var NM=['Marten','Andres','Jaak','Toomas','Raivo','Margus','Priit','Peeter','Tarmo','Kalev','Urmas','Ants','Indrek','Olev','Rein','Tiit','Meelis','Arvo','Jaan','Siim'];
+        var TY=Object.keys(TL);
+        var DS=['Otsin meest l\u00f5\u00f5gastunud kohtumiseks. Kirjuta WhatsAppi.','Otsin p\u00fcsivat partnerit. Diskreetne ja t\u00f5sine.','Spontaanne mees otsib sama. Valmis kohtumiseks.','L\u00f5\u00f5gastunud mees otsib uusi tutvusi.','Otsin kedagi vestluseks. Kirjuta!','Uus linnas ja otsin kontakte. Avatud k\u00f5igele.','Sportlik mees, 180 cm, otsib sarnaseid kohtinguks.','Otsitakse diskreetset kohtumist. Saan vastu v\u00f5tta. Kirjuta lisainfo saamiseks.','Noor mees otsib kogenud. Uudishimulik ja avatud.','Otsin p\u00fcsivat kokkulepet. Regulaarsed kohtumised soovitud.','L\u00f5\u00f5gastunud t\u00fc\u00fcp, kes lihtsalt otsib seltskonda.','Otsin meest 25-40 kohtinguks. Olen avatud.','Aktiivne mees otsib passiivset. Meeldib juhtida.','Otsin kedagi laup\u00e4eva \u00f5htuks.','K\u00fcps mees otsib nooremat. Diskreetne ja viisakas.'];
+        var regions=Object.keys(C);
+        var ads=[];
+        for(var i=0;i<50;i++){
+            var rk=regions[Math.floor(Math.random()*regions.length)];
+            var cities=C[rk];
+            var ct=cities[Math.floor(Math.random()*cities.length)];
+            var age=18+Math.floor(Math.random()*37);
+            var n=NM[Math.floor(Math.random()*NM.length)];
+            var wa='+372 5'+Math.floor(100+Math.random()*899)+' '+Math.floor(1000+Math.random()*8999);
+            ads.push({age:age,rk:rk,ct:ct,wa:wa,em:Math.random()>.5?n.toLowerCase()+Math.floor(Math.random()*99)+'@gmail.com':'',d:DS[Math.floor(Math.random()*DS.length)],tp:TY[Math.floor(Math.random()*TY.length)],acts:ACTS.slice(0,1+Math.floor(Math.random()*3)),locs:LOCS.slice(0,1+Math.floor(Math.random()*2)),ts:new Date(Date.now()-Math.random()*14*864e5).toISOString(),views:Math.floor(Math.random()*400)});
+        }
+        toast('50 kuulutuse genereerimine...');
+        api({action:'seed',ads:ads}).then(function(res){
+            if(res.ok){toast(res.count+' testkuulutust loodud!');fetchAds();}
+            else toast(res.error||'Viga',true);
+        }).catch(function(){toast('Viga',true)});
+    }
+
+    // === REPORTS ===
+    function fetchReports(){
+        api({action:'getReports'}).then(function(reports){
+            var el=document.getElementById('reportsList');
+            if(!reports||!reports.length){el.innerHTML='<p style="color:#888;padding:20px;text-align:center">Teateid pole</p>';return}
+            el.innerHTML=reports.slice().reverse().map(function(r){
+                var d=new Date(r.ts);
+                var ts=d.getDate()+'/'+(d.getMonth()+1)+' '+d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+                return'<div style="padding:10px 12px;border-bottom:1px solid #eee;font-size:13px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:#e74c3c;font-weight:700">Kuulutus #'+r.adId+' &mdash; '+r.reason+'</span><span style="color:#888;font-size:11px">'+ts+'</span></div>'+(r.text?'<div style="color:#666;font-size:12px">'+r.text+'</div>':'')+(r.ip?'<div style="color:#999;font-size:10px;margin-top:2px">IP: '+r.ip+'</div>':'')+'<div style="margin-top:6px"><button class="btn btn-green btn-sm" onclick="clearReport('+r.adId+')">Kinnita kuulutus</button> <button class="btn btn-red btn-sm" onclick="deleteAd('+r.adId+')">Kustuta kuulutus</button></div></div>';
+            }).join('');
+        }).catch(function(){toast('Viga teadete laadimisel',true)});
+    }
+
+    // === CLEANUP ===
+    function cleanOldAds(){
+        var days=parseInt(document.getElementById('cleanDays').value)||30;
+        if(!confirm('Kustutada k\u00f5ik mitte-VIP kuulutused, mis on vanemad kui '+days+' p\u00e4eva?'))return;
+        toast('Puhastamine...');
+        api({action:'cleanOld',days:days}).then(function(res){
+            if(res.ok){toast(res.removed+' vana kuulutust kustutatud');fetchAds();}
+            else toast(res.error||'Viga',true);
+        }).catch(function(){toast('Viga',true)});
+    }
+
+    // === MESSAGES ===
+    function fetchMessages(){
+        api({action:'getMessages'}).then(function(msgs){
+            var el=document.getElementById('messagesList');
+            if(!msgs||!msgs.length){el.innerHTML='<p style="color:#888;padding:20px;text-align:center">S\u00f5numeid pole</p>';return}
+            el.innerHTML=msgs.map(function(m){
+                var d=new Date(m.ts);
+                var ts=d.getDate()+'/'+(d.getMonth()+1)+' '+d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+                return'<div style="padding:12px;border-bottom:1px solid #eee;font-size:13px;'+(m.read?'opacity:.6':'')+'"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:#2c3e50;font-weight:700">'+(m.name||'Anonuumne')+' &mdash; '+(m.subject||'Teemata')+'</span><span style="color:#888;font-size:11px">'+ts+'</span></div><div style="color:#666;font-size:12px;margin-bottom:4px">Saatja: <a href="mailto:'+m.email+'" style="color:#27ae60">'+m.email+'</a></div><div style="color:#333;font-size:13px;margin-bottom:6px">'+m.message+'</div>'+(m.ip?'<div style="color:#999;font-size:10px;margin-bottom:4px">IP: '+m.ip+'</div>':'')+'<div style="display:flex;gap:6px">'+(m.read?'':'<button class="btn btn-blue btn-sm" onclick="markRead('+m.id+')">M\u00e4rgi loetuks</button>')+'<button class="btn btn-red btn-sm" onclick="deleteMsg('+m.id+')">Kustuta s\u00f5num</button> <a href="mailto:'+m.email+'?subject=Re: '+encodeURIComponent(m.subject||'')+'" class="btn btn-green btn-sm" style="text-decoration:none;color:#fff">Vasta</a></div></div>';
+            }).join('');
+        }).catch(function(){toast('Viga s\u00f5numite laadimisel',true)});
+    }
+    function markRead(id){
+        api({action:'markMessageRead',id:id}).then(function(){fetchMessages()}).catch(function(){});
+    }
+    function deleteMsg(id){
+        api({action:'deleteMessage',id:id}).then(function(res){
+            if(res.ok){toast('S\u00f5num kustutatud');fetchMessages();}
+        }).catch(function(){toast('Viga',true)});
+    }
+
+    // === REGION STATS ===
+    function renderRegionStats(){
+        var ads=cachedAds;
+        var regions={};
+        Object.keys(C).forEach(function(r){regions[r]=0});
+        var types={};var totalViews=0;
+        ads.forEach(function(a){
+            if(regions.hasOwnProperty(a.rk))regions[a.rk]++;
+            types[a.tp]=(types[a.tp]||0)+1;
+            totalViews+=(a.views||0);
+        });
+        var maxR=Math.max.apply(null,Object.values(regions))||1;
+        var html='<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">';
+        html+='<div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:20px"><h3 style="color:#2c3e50;margin-bottom:16px;font-size:15px">Kuulutused piirkonna j\u00e4rgi</h3>';
+        Object.keys(regions).forEach(function(r){
+            var pct=Math.round((regions[r]/maxR)*100);
+            html+='<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:2px"><span>'+r+'</span><span style="color:#2c3e50;font-weight:700">'+regions[r]+'</span></div><div style="background:#ecf0f1;border-radius:3px;height:8px;overflow:hidden"><div style="background:#2c3e50;height:100%;width:'+pct+'%;border-radius:3px;transition:width .5s"></div></div></div>';
+        });
+        html+='</div>';
+        html+='<div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:20px"><h3 style="color:#2c3e50;margin-bottom:16px;font-size:15px">Kuulutused t\u00fc\u00fcbi j\u00e4rgi</h3>';
+        var typeKeys=Object.keys(TL);var maxT=Math.max.apply(null,typeKeys.map(function(t){return types[t]||0}))||1;
+        typeKeys.forEach(function(t){
+            var cnt=types[t]||0;var pct2=Math.round((cnt/maxT)*100);
+            html+='<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:2px"><span>'+TL[t]+'</span><span style="color:#3498db;font-weight:700">'+cnt+'</span></div><div style="background:#ecf0f1;border-radius:3px;height:8px;overflow:hidden"><div style="background:#3498db;height:100%;width:'+pct2+'%;border-radius:3px;transition:width .5s"></div></div></div>';
+        });
+        html+='</div></div>';
+        html+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px">';
+        html+='<div class="stat-card"><div class="num">'+ads.length+'</div><div class="label">Kuulutusi kokku</div></div>';
+        html+='<div class="stat-card"><div class="num">'+totalViews.toLocaleString('et')+'</div><div class="label">Vaatamisi kokku</div></div>';
+        var avgViews=ads.length?Math.round(totalViews/ads.length):0;
+        html+='<div class="stat-card"><div class="num">'+avgViews+'</div><div class="label">Keskm. vaatamisi/kuulutus</div></div>';
+        html+='</div>';
+        document.getElementById('regionStats').innerHTML=html;
+    }
+
+    // === LOG ===
+    function renderLogData(log){
+        var el=document.getElementById('logList');
+        if(!log||!log.length){el.innerHTML='<p style="color:#888;padding:20px;text-align:center">Tegevusi pole</p>';return}
+        el.innerHTML=log.map(function(l){
+            var d=new Date(l.time);
+            var ts=d.getDate()+'/'+(d.getMonth()+1)+' '+d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');
+            return'<div class="log-item"><span class="log-time">'+ts+'</span><span class="log-action">'+l.action+'</span><span>'+l.detail+'</span></div>';
+        }).join('');
+    }
+    function clearLog(){
+        api({action:'clearLog'}).then(function(){renderLogData([]);toast('Logi t\u00fchjendatud')}).catch(function(){});
+    }
+
+    // === EDIT AD ===
+    function openEdit(id){
+        var ad=cachedAds.find(function(a){return a.id===id});
+        if(!ad){toast('Kuulutust ei leitud',true);return}
+        document.getElementById('eAdId').value=id;
+        document.getElementById('eId').textContent=id;
+        document.getElementById('eNick').value=ad.nick||'';
+        document.getElementById('eAge').value=ad.age||'';
+        document.getElementById('eHeight').value=ad.height||'';
+        document.getElementById('eWeight').value=ad.weight||'';
+        document.getElementById('eRegion').value=ad.rk||'';
+        updEditCities();
+        document.getElementById('eCity').value=ad.ct||'';
+        document.getElementById('eType').value=ad.tp||'mees-otsib';
+        document.getElementById('eWa').value=ad.wa||'';
+        document.getElementById('eVb').value=ad.vb||'';
+        document.getElementById('eEm').value=ad.em||'';
+        document.getElementById('eDesc').value=ad.d||'';
+        // build checkboxes
+        var actsHtml='',locsHtml='';
+        ACTS.forEach(function(a){actsHtml+='<label><input type="checkbox" value="'+a+'"'+((ad.acts||[]).indexOf(a)>-1?' checked':'')+'> '+a+'</label>'});
+        LOCS.forEach(function(l){locsHtml+='<label><input type="checkbox" value="'+l+'"'+((ad.locs||[]).indexOf(l)>-1?' checked':'')+'> '+l+'</label>'});
+        document.getElementById('eActs').innerHTML=actsHtml;
+        document.getElementById('eLocs').innerHTML=locsHtml;
+        document.getElementById('editModal').classList.add('show');
+    }
+    function closeEdit(){document.getElementById('editModal').classList.remove('show')}
+    function updEditCities(){
+        var reg=document.getElementById('eRegion').value;
+        var sel=document.getElementById('eCity');
+        sel.innerHTML='<option value="">-</option>';
+        if(reg&&C[reg])C[reg].forEach(function(c){sel.innerHTML+='<option>'+c+'</option>'});
+    }
+    function saveEdit(){
+        var id=parseInt(document.getElementById('eAdId').value);
+        var acts=[],locs=[];
+        document.querySelectorAll('#eActs input:checked').forEach(function(c){acts.push(c.value)});
+        document.querySelectorAll('#eLocs input:checked').forEach(function(c){locs.push(c.value)});
+        var data={
+            action:'editAd',
+            id:id,
+            nick:document.getElementById('eNick').value,
+            age:parseInt(document.getElementById('eAge').value)||18,
+            height:parseInt(document.getElementById('eHeight').value)||0,
+            weight:parseInt(document.getElementById('eWeight').value)||0,
+            rk:document.getElementById('eRegion').value||'Harju',
+            ct:document.getElementById('eCity').value,
+            tp:document.getElementById('eType').value,
+            wa:document.getElementById('eWa').value,
+            vb:document.getElementById('eVb').value,
+            em:document.getElementById('eEm').value,
+            d:document.getElementById('eDesc').value,
+            acts:acts,
+            locs:locs
+        };
+        toast('Salvestamine...');
+        api(data).then(function(res){
+            if(res.ok){toast('Kuulutus #'+id+' muudetud!');closeEdit();fetchAds();}
+            else{toast(res.error||'Viga',true)}
+        }).catch(function(){toast('V\u00f5rguviga',true)});
+    }
+
+    // === INIT ===
+    checkSession();
+    </script>
+</body>
+</html>

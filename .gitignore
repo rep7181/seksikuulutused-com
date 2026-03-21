@@ -1,0 +1,4 @@
+node_modules/
+.scraped-ids-mahajataha.json
+.env
+.netlify/
