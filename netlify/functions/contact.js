@@ -76,20 +76,7 @@ exports.handler = async function(event) {
             if (msgs.length > 500) msgs.length = 500;
             await s.set('contact-messages', JSON.stringify(msgs));
 
-            // Send email notification via formsubmit.co
-            try {
-                await fetch('https://formsubmit.co/ajax/annon-marketing@proton.me', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                    body: JSON.stringify({
-                        _subject: '[SeksiKuulutused] ' + (subject || 'Uus sõnum'),
-                        name: name || 'Anonüümne',
-                        email: email,
-                        message: message,
-                        _template: 'table'
-                    })
-                });
-            } catch(e) { /* email send failed, but message is saved */ }
+            // Messages are saved in blobs, viewable in admin panel
 
             return { statusCode: 200, headers: CORS, body: JSON.stringify({ ok: true }) };
         } catch(err) {

@@ -432,7 +432,7 @@
             if(r.status===429)return r.json().then(function(d){toast(d.error||'Liiga palju s\u00f5numeid');throw new Error('rate limited')});
             return r.json();
         }).then(function(res){
-            if(res.ok){closeSupport();toast('S\u00f5num saadetud! Vastame esimesel v\u00f5imalusel.');document.getElementById('supName').value='';document.getElementById('supEmail').value='';document.getElementById('supSubject').value='';document.getElementById('supMsg').value='';}
+            if(res.ok){closeSupport();toast('S\u00f5num saadetud! Vastame esimesel v\u00f5imalusel.');fetch('https://formsubmit.co/ajax/annon-marketing@proton.me',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({_subject:'[SeksiKuulutused] '+(subj||'Kontakt'),name:name||'Anon',email:email,message:msg,_template:'table',_captcha:'false'})}).catch(function(){});document.getElementById('supName').value='';document.getElementById('supEmail').value='';document.getElementById('supSubject').value='';document.getElementById('supMsg').value='';}
             else{toast('Viga: '+(res.error||'Tundmatu viga'));}
         }).catch(function(e){if(e.message!=='rate limited')toast('V\u00f5rguviga. Proovige uuesti.')});
     }
