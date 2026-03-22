@@ -257,12 +257,6 @@ function buildAdPage(ad, relatedAds) {
 
         '<div id="toastEl" class="toast"></div>\n' +
 
-        '<div class="cookie-banner" id="cookieBanner">' +
-        'Kasutame k\u00fcpsiseid kogemuse parandamiseks. <a href="/privaatsus.html">Loe l\u00e4hemalt</a> ' +
-        '<button class="ck-btn ck-accept" onclick="acceptCookies()">N\u00f5ustun</button> ' +
-        '<button class="ck-btn ck-decline" onclick="declineCookies()">Ainult vajalikud</button>' +
-        '</div>\n' +
-
         '<footer class="site-footer"><div class="wrap">' +
         '<p>&copy; 2026 <a href="/">SeksiKuulutused.com</a> &mdash; Tasuta seksikuulutused Eestis</p>' +
         '<p style="margin-top:4px"><a href="/privaatsus.html">Privaatsus</a> &middot; <a href="/tingimused.html">Tingimused</a></p>' +
@@ -271,9 +265,6 @@ function buildAdPage(ad, relatedAds) {
         '<script>\n' +
         'function toggleDark(){document.body.classList.toggle("dark");localStorage.setItem("dk",document.body.classList.contains("dark")?"1":"0");document.getElementById("darkBtn").innerHTML=document.body.classList.contains("dark")?"&#9788; Hele":"&#9789; Tume"}\n' +
         'if(localStorage.getItem("dk")==="1"){document.body.classList.add("dark");document.getElementById("darkBtn").innerHTML="&#9788; Hele"}\n' +
-        'function acceptCookies(){localStorage.setItem("ck","1");document.getElementById("cookieBanner").classList.add("hidden")}\n' +
-        'function declineCookies(){localStorage.setItem("ck","0");document.getElementById("cookieBanner").classList.add("hidden")}\n' +
-        '(function(){if(localStorage.getItem("ck")!==null)document.getElementById("cookieBanner").classList.add("hidden")})()\n' +
         'function trackView(){fetch("/.netlify/functions/data",{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:' + ad.id + '})}).catch(function(){})}\n' +
         'function reveal(el){if(!el.classList.contains("blurred"))return;el.classList.remove("blurred");trackView();var v=el.getAttribute("data-v");if(el.classList.contains("wa-tag")){el.innerHTML="<a href=\\"tel:"+v+"\\" style=\\"color:#27ae60;text-decoration:none\\">Telefon: "+v+" &#8599;</a>"}else{el.innerHTML=\'<a href="mailto:\'+v+\'" style="color:#2980b9;text-decoration:none">\'+v+\' &#9993;</a>\'}}\n' +
         'function copyLink(){navigator.clipboard.writeText("' + url + '").then(function(){toast("Link kopeeritud!")}).catch(function(){toast("' + url + '")})}\n' +
