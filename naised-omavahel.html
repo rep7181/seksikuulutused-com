@@ -31,6 +31,7 @@
         .logo{font-size:24px;font-weight:900;color:#2c3e50}
         .logo span{color:#e74c3c}
         .logo small{display:block;font-size:12px;font-weight:400;color:#7f8c8d;margin-top:-2px}
+        .sticky-wrap{position:sticky;top:0;z-index:100}
         .site-nav{background:#2c3e50}
         .site-nav ul{list-style:none;display:flex;flex-wrap:wrap}
         .site-nav a{display:block;padding:9px 16px;color:#bdc3c7;font-size:13px;font-weight:700;transition:background .15s}
@@ -108,6 +109,7 @@
         <span><strong>SeksiKuulutused.com</strong> &mdash; Naised omavahel kuulutused Eestis</span>
         <a href="index.html">&larr; K&otilde;ik kuulutused</a>
     </div></div>
+    <div class="sticky-wrap">
     <header class="site-header"><div class="wrap header-inner">
         <a href="index.html" style="text-decoration:none"><div class="logo">Seksi<span>Kuulutused</span>.com<small>Naised omavahel</small></div></a>
     </div></header>
@@ -123,6 +125,7 @@
         <li><a href="massaaz.html">Massaa&zcaron;</a></li>
         <li><a href="lisa-kuulutus.html">Lisa kuulutus</a></li>
     </ul></div></nav>
+    </div>
 
     <div class="hero"><div class="wrap">
         <h1>Naised omavahel &ndash; Kuulutused Eestis</h1>
@@ -193,7 +196,7 @@
             var tags='';if(a.acts&&a.acts.length)tags=a.acts.map(function(t){return'<span>'+esc(t)+'</span>'}).join('');
             var tl=TL[a.tp]||'';
             var imgHtml=a.img?'<a href="/kuulutus/'+a.id+'" target="_blank"><img src="'+esc(a.img)+'" alt="" class="ad-img" loading="lazy" onerror="this.style.display=\'none\'"></a>':'';
-            return'<div class="ad-card">'+imgHtml+'<a href="/kuulutus/'+a.id+'" target="_blank" style="color:inherit;text-decoration:none"><div class="ad-head">'+esc(a.nick||'Anon\u00fc\u00fcmne')+', '+a.age+'</div></a><div class="ad-meta">'+esc(a.ct||'')+((a.ct&&a.rk)?', ':'')+esc(a.rk||'')+(tl?' &middot; <span class="type-tag">'+tl+'</span>':'')+'</div><div class="ad-desc">'+esc((a.d||'').substring(0,200))+(a.d&&a.d.length>200?'...':'')+'</div>'+(tags?'<div class="ad-tags">'+tags+'</div>':'')+'<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">'+(a.wa?'<span class="wa-tag blurred" data-v="'+a.wa+'" onclick="rvl(this)" style="cursor:pointer">Tel: '+a.wa.substring(0,7)+'<span class="wa-hidden"> ** **</span></span>':'')+(a.em?'<span class="em-tag blurred" data-v="'+a.em+'" onclick="rvl(this)" style="cursor:pointer">'+a.em.substring(0,3)+'<span class="em-hidden">*****</span></span>':'')+'<a href="/kuulutus/'+a.id+'" target="_blank" style="color:#2980b9;font-size:13px;font-weight:700;margin-left:auto">Vaata &rarr;</a></div></div>'
+            return'<div class="ad-card" style="cursor:pointer" onclick="if(event.target.closest('.wa-tag,.em-tag'))return;window.open('/kuulutus/'+a.id,'_blank')">'+imgHtml+'<a href="/kuulutus/'+a.id+'" target="_blank" style="color:inherit;text-decoration:none"><div class="ad-head">'+esc(a.nick||'Anon\u00fc\u00fcmne')+', '+a.age+'</div></a><div class="ad-meta">'+esc(a.ct||'')+((a.ct&&a.rk)?', ':'')+esc(a.rk||'')+(tl?' &middot; <span class="type-tag">'+tl+'</span>':'')+'</div><div class="ad-desc">'+esc((a.d||'').substring(0,200))+(a.d&&a.d.length>200?'...':'')+'</div>'+(tags?'<div class="ad-tags">'+tags+'</div>':'')+'<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">'+(a.wa?'<span class="wa-tag blurred" data-v="'+a.wa+'" onclick="rvl(this)" style="cursor:pointer">Tel: '+a.wa.substring(0,7)+'<span class="wa-hidden"> ** **</span></span>':'')+(a.em?'<span class="em-tag blurred" data-v="'+a.em+'" onclick="rvl(this)" style="cursor:pointer">'+a.em.substring(0,3)+'<span class="em-hidden">*****</span></span>':'')+'<a href="/kuulutus/'+a.id+'" target="_blank" style="color:#2980b9;font-size:13px;font-weight:700;margin-left:auto">Vaata &rarr;</a></div></div>'
         }).join('');
     }).catch(function(e){document.getElementById('adsList').innerHTML='<div class="empty-msg">Viga: '+e.message+'</div>'});
     </script>

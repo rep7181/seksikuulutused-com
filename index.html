@@ -57,7 +57,8 @@
         .fav-trigger:hover{border-color:#e74c3c}
         .fav-badge{background:#e74c3c;color:#fff;font-size:10px;padding:0 5px;border-radius:8px;margin-left:3px;font-weight:700}
 
-        .site-nav{background:#2c3e50;transition:background .3s;position:sticky;top:0;z-index:100}
+        .sticky-wrap{position:sticky;top:0;z-index:100}
+        .site-nav{background:#2c3e50;transition:background .3s}
         .site-nav ul{list-style:none;display:flex;flex-wrap:wrap}
         .site-nav a{display:block;padding:9px 16px;color:#bdc3c7;font-size:13px;font-weight:700;transition:background .15s}
         .site-nav a:hover,.site-nav a.active{background:rgba(0,0,0,.2);color:#ecf0f1;text-decoration:none}
@@ -93,7 +94,7 @@
         .sort-sel{padding:4px 8px;border:1px solid #ccc;border-radius:3px;font-family:inherit;font-size:12px}
 
         .masonry{column-count:2;column-gap:10px;margin-bottom:16px}
-        .item{background:#fff;border:1px solid #ddd;border-radius:3px;padding:12px;margin-bottom:10px;break-inside:avoid;transition:all .2s;position:relative}
+        .item{background:#fff;border:1px solid #ddd;border-radius:3px;padding:12px;margin-bottom:10px;break-inside:avoid;transition:all .2s;position:relative;cursor:pointer}
         .item:hover{border-color:#3498db;box-shadow:0 1px 6px rgba(0,0,0,.06)}
         .item-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}
         .item-who{font-weight:700;font-size:14px}
@@ -310,6 +311,7 @@
         <button class="theme-toggle" onclick="toggleDark()" id="darkBtn">&#9789; Tume</button>
     </div></div>
 
+    <div class="sticky-wrap">
     <header class="site-header"><div class="wrap header-inner">
         <a href="index.html" style="text-decoration:none"><div class="logo">Seksi<span>Kuulutused</span>.com<small>Tasuta seksikuulutused &amp; kontaktid Eestis</small></div></a>
         <div class="hdr-right">
@@ -330,6 +332,7 @@
         <li><a href="massaaz.html">Massaa&zcaron;</a></li>
         <li><a href="lisa-kuulutus.html">Lisa kuulutus</a></li>
     </ul></div></nav>
+    </div>
 
     <div class="wrap">
         <h1 style="font-size:18px;margin:14px 0 4px">Tasuta Seksikuulutused - Kohtumised mida oled otsinud</h1>
@@ -502,7 +505,7 @@
             if(l.acts&&l.acts.length)prefHtml+=l.acts.map(function(a){return'<span class="pref-tag pref-act">'+a+'</span>'}).join('');
             if(l.locs&&l.locs.length)prefHtml+=l.locs.map(function(a){return'<span class="pref-tag pref-loc">'+a+'</span>'}).join('');
             var adHtml=(idx>0&&idx%5===0?getNativeAd():'');
-            return adHtml+'<div class="item'+(l.vip?' vip-item':'')+'">'+(l.vip?'<span class="vip-dot">VIP</span>':'')+
+            return adHtml+'<div class="item'+(l.vip?' vip-item':'')+'" onclick="if(event.target.closest(\'.wa-tag,.em-tag,.fav-btn,.show-more,.report-lnk\'))return;window.open(\'/kuulutus/'+l.id+'\',\'_blank\')">'+(l.vip?'<span class="vip-dot">VIP</span>':'')+
                 '<div class="item-head"><a href="/kuulutus/'+l.id+'" target="_blank" class="item-who" style="color:inherit;text-decoration:none">'+(l.nick||'Anon\u00fc\u00fcmne')+', '+l.age+'</a><div class="item-actions"><button class="fav-btn'+(lk?' liked':'')+'" onclick="togFav(\''+l.wa.replace(/'/g,"\\'")+'\','+l.age+',\''+(l.ct||'').replace(/'/g,"\\'")+'\')">'+
                 (lk?'&#9829;':'&#9825;')+'</button><span class="item-time" title="'+fmtT(l.ts)+'">'+relT(l.ts)+'</span>'+(isNew?'<span class="new-dot">UUS</span>':'')+'</div></div>'+
                 '<div class="item-meta">'+((l.ct&&l.ct.trim())?l.ct.trim()+', ':'')+l.rk+(l.height?' &middot; '+l.height+' cm':'')+(l.weight?' &middot; '+l.weight+' kg':'')+'</div>'+

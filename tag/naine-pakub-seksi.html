@@ -30,7 +30,8 @@ a{color:#2980b9;text-decoration:none}a:hover{text-decoration:underline}
 .logo{font-size:24px;font-weight:900;color:#2c3e50}
 .logo span{color:#e74c3c}
 .logo small{display:block;font-size:12px;font-weight:400;color:#7f8c8d;margin-top:-2px}
-.site-nav{background:#2c3e50;position:sticky;top:0;z-index:100;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sticky-wrap{position:sticky;top:0;z-index:100}
+        .site-nav{background:#2c3e50;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .site-nav ul{list-style:none;display:flex;flex-wrap:nowrap;white-space:nowrap}
 .site-nav a{display:block;padding:9px 16px;color:#bdc3c7;font-size:13px;font-weight:700;transition:background .15s}
 .site-nav a:hover{background:rgba(0,0,0,.2);color:#ecf0f1;text-decoration:none}
@@ -106,6 +107,7 @@ a{color:#2980b9;text-decoration:none}a:hover{text-decoration:underline}
         <span><strong>SeksiKuulutused.com</strong> &mdash; naine pakub seksi</span>
         <a href="/">&larr; K&otilde;ik kuulutused</a>
     </div></div>
+    <div class="sticky-wrap">
     <header class="site-header"><div class="wrap header-inner">
         <a href="/" style="text-decoration:none"><div class="logo">Seksi<span>Kuulutused</span>.com<small>naine pakub seksi</small></div></a>
     </div></header>
@@ -121,6 +123,7 @@ a{color:#2980b9;text-decoration:none}a:hover{text-decoration:underline}
         <li><a href="/massaaz.html">Massaa&zcaron;</a></li>
         <li><a href="/lisa-kuulutus.html">Lisa kuulutus</a></li>
     </ul></div></nav>
+    </div>
 
     <div class="hero"><div class="wrap">
         <h1>naine pakub seksi &ndash; Seksikuulutused Eestis</h1>
@@ -196,7 +199,7 @@ a{color:#2980b9;text-decoration:none}a:hover{text-decoration:underline}
             var imgHtml=a.img?'<a href="/kuulutus/'+a.id+'"><img src="'+esc(a.img)+'" alt="" class="ad-img" loading="lazy" onerror="this.style.display=\'none\'"></a>':'';
             var waHtml=a.wa?'<span class="wa-tag blurred" data-v="'+a.wa+'" onclick="rvl(this)">Tel: '+a.wa.substring(0,7)+'<span class="wa-hidden"> ** **</span></span>':'';
             var emHtml=a.em?'<span class="em-tag blurred" data-v="'+a.em+'" onclick="rvl(this)">'+a.em.substring(0,3)+'<span class="em-hidden">*****</span></span>':'';
-            return'<div class="ad-card">'+imgHtml+'<a href="/kuulutus/'+a.id+'" style="color:inherit;text-decoration:none"><div class="ad-head">'+esc(a.nick||'Anon\u00fc\u00fcmne')+', '+a.age+'</div></a><div class="ad-meta">'+esc(a.ct||'')+((a.ct&&a.rk)?', ':'')+esc(a.rk||'')+(tl?' &middot; <span class="type-tag">'+tl+'</span>':'')+'</div><div class="ad-desc">'+esc((a.d||'').substring(0,200))+(a.d&&a.d.length>200?'...':'')+'</div>'+(tags?'<div class="ad-tags" style="margin-top:4px">'+tags+'</div>':'')+'<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">'+waHtml+emHtml+'<a href="/kuulutus/'+a.id+'" style="color:#2980b9;font-size:13px;font-weight:700;margin-left:auto">Vaata &rarr;</a></div></div>'
+            return'<div class="ad-card" style="cursor:pointer" onclick="if(event.target.closest('.wa-tag,.em-tag'))return;window.open('/kuulutus/'+a.id,'_blank')">'+imgHtml+'<a href="/kuulutus/'+a.id+'" style="color:inherit;text-decoration:none"><div class="ad-head">'+esc(a.nick||'Anon\u00fc\u00fcmne')+', '+a.age+'</div></a><div class="ad-meta">'+esc(a.ct||'')+((a.ct&&a.rk)?', ':'')+esc(a.rk||'')+(tl?' &middot; <span class="type-tag">'+tl+'</span>':'')+'</div><div class="ad-desc">'+esc((a.d||'').substring(0,200))+(a.d&&a.d.length>200?'...':'')+'</div>'+(tags?'<div class="ad-tags" style="margin-top:4px">'+tags+'</div>':'')+'<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">'+waHtml+emHtml+'<a href="/kuulutus/'+a.id+'" style="color:#2980b9;font-size:13px;font-weight:700;margin-left:auto">Vaata &rarr;</a></div></div>'
         }).join('');
     }).catch(function(e){document.getElementById('adsList').innerHTML='<div class="empty-msg">Viga laadimisel.</div>'});
     </script>
