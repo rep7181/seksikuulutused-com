@@ -66,7 +66,26 @@ a{color:#2980b9;text-decoration:none}a:hover{text-decoration:underline}
 .foot-links{display:flex;justify-content:center;gap:16px;margin-bottom:6px;flex-wrap:wrap}
 .foot-links a{color:#7f8c8d;font-size:12px}
 @media(max-width:700px){.header-inner{flex-direction:column;gap:6px;text-align:center}.hero h1{font-size:18px}.ad-img{width:70px;height:70px}.site-nav a{font-size:11px;padding:8px 10px}}
-</style>
+.menu-btn{display:none;background:none;border:none;font-size:22px;color:#ecf0f1;cursor:pointer;padding:8px 12px;font-family:inherit}
+        .menu-close{display:none}
+        @media(max-width:700px){
+            .menu-btn{display:block}
+            .site-nav{position:relative}
+            .site-nav ul{display:none;flex-direction:column;background:#2c3e50;position:absolute;top:100%;left:0;right:0;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+            .site-nav ul.open{display:flex}
+            .site-nav a{padding:12px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.05)}
+            .menu-close{display:block;text-align:right;padding:8px 16px;color:#95a5a6;font-size:12px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.1)}
+            .ad-card{padding:10px}
+            .ad-img{width:65px;height:65px}
+            .ad-head{font-size:13px}
+            .ad-desc{font-size:12px}
+            .wa-tag,.em-tag{font-size:10px;padding:2px 6px}
+            .topbar{font-size:10px}
+            .hero h1{font-size:18px}
+            .hero p{font-size:12px}
+            .wrap{padding:0 8px}
+        }
+        </style>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
     {"@type":"ListItem","position":1,"name":"Avaleht","item":"https://www.seksikuulutused.com/"},
@@ -90,7 +109,10 @@ a{color:#2980b9;text-decoration:none}a:hover{text-decoration:underline}
     <header class="site-header"><div class="wrap header-inner">
         <a href="/" style="text-decoration:none"><div class="logo">Seksi<span>Kuulutused</span>.com<small>seks portaalid</small></div></a>
     </div></header>
-    <nav class="site-nav"><div class="wrap"><ul>
+    <nav class="site-nav"><div class="wrap">
+        <button class="menu-btn" onclick="var u=this.parentNode.querySelector('ul');u.classList.toggle('open')">&#9776; Menüü</button>
+        <ul>
+        <li class="menu-close" onclick="this.parentNode.classList.remove('open')">&times; Sulge</li>
         <li><a href="/">Kuulutused</a></li>
         <li><a href="/mees-otsib-seksi.html">Mees otsib seksi</a></li>
         <li><a href="/naine-pakub-seksi.html">Naine pakub seksi</a></li>

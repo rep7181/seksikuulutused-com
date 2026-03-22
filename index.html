@@ -216,28 +216,64 @@
         .ck-accept{background:#27ae60;color:#fff}
         .ck-decline{background:#7f8c8d;color:#fff}
 
+        /* Hamburger menu */
+        .menu-btn{display:none;background:none;border:none;font-size:22px;color:#ecf0f1;cursor:pointer;padding:8px 12px;font-family:inherit}
+        .menu-close{display:none}
+
         @media(max-width:700px){
             .masonry{column-count:1}
             .filter-grid{flex-direction:column;display:none}
             .fg{grid-template-columns:1fr}
             .header-inner{flex-direction:column;gap:6px;text-align:center}
+            .logo{font-size:20px}
+            .logo small{font-size:11px}
             .stats-row{gap:4px}
-            .stat-box{min-width:70px;padding:6px 8px}
-            .stat-num{font-size:16px}
-            .city-bar{overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
+            .stat-box{min-width:60px;padding:5px 6px}
+            .stat-num{font-size:15px}
+            .stat-label{font-size:9px}
+            .city-bar{overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;padding:6px 8px}
             .city-bar a{font-size:11px;padding:2px 6px}
-            .site-nav{overflow-x:auto;-webkit-overflow-scrolling:touch}
-            .site-nav ul{flex-wrap:nowrap;white-space:nowrap}
-            .site-nav a{padding:8px 10px;font-size:11px}
-            .item-img{width:70px;height:70px}
-            .item-bottom{font-size:11px}
-            .wa-tag,.em-tag{font-size:11px;padding:2px 7px}
+            /* Hamburger nav */
+            .menu-btn{display:block}
+            .site-nav{position:relative}
+            .site-nav ul{display:none;flex-direction:column;background:#2c3e50;position:absolute;top:100%;left:0;right:0;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+            .site-nav ul.open{display:flex}
+            .site-nav a{padding:12px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.05)}
+            .site-nav a:hover,.site-nav a.active{background:rgba(0,0,0,.3)}
+            .menu-close{display:block;text-align:right;padding:8px 16px;color:#95a5a6;font-size:12px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.1)}
+            /* Ad cards */
+            .item{padding:10px}
+            .item-img{width:65px;height:65px;border-radius:4px}
+            .item-who{font-size:13px}
+            .item-meta{font-size:11px}
+            .item-desc{font-size:12px;-webkit-line-clamp:3;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}
+            .item-bottom{font-size:11px;gap:4px}
+            .wa-tag,.em-tag{font-size:10px;padding:2px 6px}
+            .type-tag{font-size:9px;padding:1px 5px}
+            .pref-tag{font-size:9px;padding:1px 4px}
+            /* Form */
             .fg-item select,.fg-item input[type=number]{min-width:100%;width:100%}
+            .search-input{font-size:16px;padding:10px}
             .results-bar{font-size:11px}
-            .topbar{font-size:11px}
-            .content-section{padding:12px}
-            .form-box{padding:12px}
+            /* Spacing */
+            .topbar{font-size:10px;padding:4px 0}
+            .topbar .wrap{flex-wrap:wrap;gap:4px;justify-content:center}
+            .wrap{padding:0 8px}
+            .content-section{padding:10px}
+            .content-section h2{font-size:16px}
+            .content-section p{font-size:12px}
+            .form-box{padding:10px}
             .hdr-right{font-size:11px}
+            .fq-q{font-size:12px;padding:8px 10px}
+            .fq-a{font-size:12px;padding:6px 10px}
+            .site-footer{font-size:11px;padding:16px 0}
+            .footer-links{flex-direction:column;gap:4px;text-align:center}
+        }
+        @media(max-width:380px){
+            .stat-box{min-width:50px;padding:4px}
+            .stat-num{font-size:13px}
+            .item-img{width:55px;height:55px}
+            .logo{font-size:18px}
         }
     </style>
     <script type="application/ld+json">
@@ -282,7 +318,10 @@
         </div>
     </div></header>
 
-    <nav class="site-nav"><div class="wrap"><ul>
+    <nav class="site-nav"><div class="wrap">
+        <button class="menu-btn" onclick="var u=this.parentNode.querySelector('ul');u.classList.toggle('open')">&#9776; Menüü</button>
+        <ul>
+        <li class="menu-close" onclick="this.parentNode.classList.remove('open')">&times; Sulge</li>
         <li><a href="index.html" class="active">Kuulutused</a></li>
         <li><a href="mees-otsib-seksi.html">Mees otsib seksi</a></li>
         <li><a href="naine-pakub-seksi.html">Naine pakub seksi</a></li>
