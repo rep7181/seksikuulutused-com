@@ -57,7 +57,7 @@
         .fav-trigger:hover{border-color:#e74c3c}
         .fav-badge{background:#e74c3c;color:#fff;font-size:10px;padding:0 5px;border-radius:8px;margin-left:3px;font-weight:700}
 
-        .site-nav{background:#2c3e50;transition:background .3s}
+        .site-nav{background:#2c3e50;transition:background .3s;position:sticky;top:0;z-index:100}
         .site-nav ul{list-style:none;display:flex;flex-wrap:wrap}
         .site-nav a{display:block;padding:9px 16px;color:#bdc3c7;font-size:13px;font-weight:700;transition:background .15s}
         .site-nav a:hover,.site-nav a.active{background:rgba(0,0,0,.2);color:#ecf0f1;text-decoration:none}
@@ -126,7 +126,7 @@
         .share-lnk:hover{color:#2980b9}
         .report-lnk{font-size:11px;color:#ccc;cursor:pointer;margin-left:auto}
         .report-lnk:hover{color:#e74c3c}
-        .new-dot{position:absolute;top:8px;right:8px;background:#e74c3c;color:#fff;font-size:9px;font-weight:900;padding:1px 5px;border-radius:2px;text-transform:uppercase}
+        .new-dot{background:#e74c3c;color:#fff;font-size:9px;font-weight:900;padding:1px 5px;border-radius:2px;text-transform:uppercase;white-space:nowrap}
         .vip-dot{position:absolute;top:8px;left:8px;background:#f39c12;color:#000;font-size:9px;font-weight:900;padding:1px 5px;border-radius:2px;text-transform:uppercase}
         .item.vip-item{border-color:#f39c12;border-width:2px;box-shadow:0 0 8px rgba(243,156,18,.15);padding-top:28px}
         .item.vip-item:hover{border-color:#e67e22;box-shadow:0 0 12px rgba(243,156,18,.25)}
@@ -502,17 +502,17 @@
             if(l.acts&&l.acts.length)prefHtml+=l.acts.map(function(a){return'<span class="pref-tag pref-act">'+a+'</span>'}).join('');
             if(l.locs&&l.locs.length)prefHtml+=l.locs.map(function(a){return'<span class="pref-tag pref-loc">'+a+'</span>'}).join('');
             var adHtml=(idx>0&&idx%5===0?getNativeAd():'');
-            return adHtml+'<div class="item'+(l.vip?' vip-item':'')+'">'+(l.vip?'<span class="vip-dot">VIP</span>':'')+(isNew?'<span class="new-dot">Uus</span>':'')+
-                '<div class="item-head"><a href="/kuulutus/'+l.id+'" class="item-who" style="color:inherit;text-decoration:none">'+(l.nick||'Anon\u00fc\u00fcmne')+', '+l.age+'</a><div class="item-actions"><button class="fav-btn'+(lk?' liked':'')+'" onclick="togFav(\''+l.wa.replace(/'/g,"\\'")+'\','+l.age+',\''+(l.ct||'').replace(/'/g,"\\'")+'\')">'+
-                (lk?'&#9829;':'&#9825;')+'</button><span class="item-time" title="'+fmtT(l.ts)+'">'+relT(l.ts)+'</span></div></div>'+
+            return adHtml+'<div class="item'+(l.vip?' vip-item':'')+'">'+(l.vip?'<span class="vip-dot">VIP</span>':'')+
+                '<div class="item-head"><a href="/kuulutus/'+l.id+'" target="_blank" class="item-who" style="color:inherit;text-decoration:none">'+(l.nick||'Anon\u00fc\u00fcmne')+', '+l.age+'</a><div class="item-actions"><button class="fav-btn'+(lk?' liked':'')+'" onclick="togFav(\''+l.wa.replace(/'/g,"\\'")+'\','+l.age+',\''+(l.ct||'').replace(/'/g,"\\'")+'\')">'+
+                (lk?'&#9829;':'&#9825;')+'</button><span class="item-time" title="'+fmtT(l.ts)+'">'+relT(l.ts)+'</span>'+(isNew?'<span class="new-dot">UUS</span>':'')+'</div></div>'+
                 '<div class="item-meta">'+((l.ct&&l.ct.trim())?l.ct.trim()+', ':'')+l.rk+(l.height?' &middot; '+l.height+' cm':'')+(l.weight?' &middot; '+l.weight+' kg':'')+'</div>'+
-                (l.img?'<a href="/kuulutus/'+l.id+'"><img class="item-img" src="'+l.img+'" alt="'+(l.nick||'Kuulutus')+'" loading="lazy" onerror="this.style.display=\'none\'"></a>':'')+
+                (l.img?'<a href="/kuulutus/'+l.id+'" target="_blank"><img class="item-img" src="'+l.img+'" alt="'+(l.nick||'Kuulutus')+'" loading="lazy" onerror="this.style.display=\'none\'"></a>':'')+
                 '<div class="item-desc'+(long?' collapsed':'')+'" id="desc'+l.id+'">'+l.d+'</div>'+
                 (long?'<span class="show-more" onclick="expand('+l.id+',this)">N\u00e4ita rohkem &raquo;</span>':'')+
                 (prefHtml?'<div style="margin-bottom:6px;line-height:1.8">'+prefHtml+'</div>':'')+
                 '<div class="item-bottom">'+(l.wa?'<span class="wa-tag blurred" onclick="reveal(this,\''+l.wa+'\','+l.id+')" title="Kl\u00f5psa n\u00e4gemiseks">Tel: '+l.wa.substring(0,7)+'<span class="wa-hidden"> ** ** **</span></span>':'')+
                 (l.em?'<span class="em-tag blurred" onclick="reveal(this,\''+l.em+'\','+l.id+')" title="Kl\u00f5psa n\u00e4gemiseks">'+l.em.substring(0,3)+'<span class="em-hidden">*****</span></span>':'')+
-                '<span class="type-tag">'+(TL[l.tp]||'Mees otsib')+'</span><span class="views-tag">&#128065; '+l.views+'</span><a href="/kuulutus/'+l.id+'" class="share-lnk" style="color:#2980b9">Vaata &rarr;</a><span class="report-lnk" onclick="openReport('+l.id+')">Teata</span></div></div>'
+                '<span class="type-tag">'+(TL[l.tp]||'Mees otsib')+'</span><span class="views-tag">&#128065; '+l.views+'</span><a href="/kuulutus/'+l.id+'" target="_blank" class="share-lnk" style="color:#2980b9">Vaata &rarr;</a><span class="report-lnk" onclick="openReport('+l.id+')">Teata</span></div></div>'
         }).join('');
         document.getElementById('shownC').textContent=items.length;
         document.getElementById('filtC').textContent=filt.length;

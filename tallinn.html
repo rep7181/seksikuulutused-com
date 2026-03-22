@@ -169,7 +169,7 @@
         el.innerHTML=filtered.map(function(a){
             var tags='';if(a.acts&&a.acts.length)tags=a.acts.map(function(t){return'<span>'+t+'</span>'}).join('');
             var tl=typeLabels[a.type]||a.type||'';
-            return'<div class="ad-card"><a href="/kuulutus/'+a.id+'" style="color:inherit;text-decoration:none"><div class="ad-head">'+(a.nick||'Anonüümne')+', '+a.age+'</div></a><div class="ad-meta">'+(a.ct||'Tallinn')+', Harju'+(tl?' &middot; '+tl:'')+'</div><div class="ad-desc">'+(a.d||'').substring(0,200)+(a.d&&a.d.length>200?'...':'')+'</div>'+(tags?'<div class="ad-tags">'+tags+'</div>':'')+'<div style="margin-top:8px"><a href="/kuulutus/'+a.id+'" style="color:#2980b9;font-size:13px;font-weight:700">Vaata kuulutust &rarr;</a></div>'+'</div>'
+            return'<div class="ad-card"><a href="/kuulutus/'+a.id+'" target="_blank" style="color:inherit;text-decoration:none"><div class="ad-head">'+(a.nick||'Anonüümne')+', '+a.age+'</div></a><div class="ad-meta">'+(a.ct||'Tallinn')+', Harju'+(tl?' &middot; '+tl:'')+'</div><div class="ad-desc">'+(a.d||'').substring(0,200)+(a.d&&a.d.length>200?'...':'')+'</div>'+(tags?'<div class="ad-tags">'+tags+'</div>':'')+'<div style="margin-top:8px"><a href="/kuulutus/'+a.id+'" target="_blank" style="color:#2980b9;font-size:13px;font-weight:700">Vaata kuulutust &rarr;</a></div>'+'</div>'
         }).join('');
     }).catch(function(){document.getElementById('adsList').innerHTML='<div class="empty-msg">Viga laadimisel. <a href="index.html">Vaata k\u00f5iki kuulutusi</a></div>'});
     </script>
