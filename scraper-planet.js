@@ -156,7 +156,7 @@ function parseListingPage(html, category) {
 
         // Name
         const nameMatch = block.match(/<b>Nimi:<\/b>\s*([^<\n]+)/);
-        ad.nick = nameMatch ? nameMatch[1].trim() : '';
+        ad.nick = nameMatch ? nameMatch[1].replace(/&#\d+;/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').trim() : '';
 
         // Age
         const ageMatch = block.match(/<b>Vanus:<\/b>\s*(\d+)/);
