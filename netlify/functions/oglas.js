@@ -107,10 +107,13 @@ function buildAdPage(ad, relatedAds) {
         '.logo{font-size:24px;font-weight:900;color:#2c3e50}\n' +
         '.logo span{color:#e74c3c}\n' +
         '.logo small{display:block;font-size:12px;font-weight:400;color:#7f8c8d;margin-top:-2px}\n' +
+        '.sticky-wrap{position:sticky;top:0;z-index:100}\n' +
         '.site-nav{background:#2c3e50;transition:background .3s}\n' +
         '.site-nav ul{list-style:none;display:flex;flex-wrap:wrap}\n' +
         '.site-nav a{display:block;padding:9px 16px;color:#bdc3c7;font-size:13px;font-weight:700;transition:background .15s}\n' +
         '.site-nav a:hover{background:rgba(0,0,0,.2);color:#ecf0f1;text-decoration:none}\n' +
+        '.menu-btn{display:none;background:none;border:none;font-size:22px;color:#ecf0f1;cursor:pointer;padding:8px 12px;font-family:inherit}\n' +
+        '.menu-close{display:none}\n' +
         '.item{background:#fff;border:1px solid #ddd;border-radius:3px;padding:12px;margin-bottom:10px;transition:all .2s;position:relative}\n' +
         '.item:hover{border-color:#3498db;box-shadow:0 1px 6px rgba(0,0,0,.06)}\n' +
         '.item-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px}\n' +
@@ -161,7 +164,7 @@ function buildAdPage(ad, relatedAds) {
         '.ck-decline{background:#7f8c8d;color:#fff}\n' +
         '.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2c3e50;color:#fff;padding:8px 20px;border-radius:3px;font-size:13px;font-weight:700;z-index:9998;opacity:0;transition:opacity .3s}\n' +
         '.toast.show{opacity:1}\n' +
-        '@media(max-width:700px){.header-inner{flex-direction:column;gap:6px;text-align:center}.site-nav{overflow-x:auto;-webkit-overflow-scrolling:touch}.site-nav ul{flex-wrap:nowrap;white-space:nowrap}.site-nav a{padding:8px 10px;font-size:11px}.item{padding:10px}.item-img{max-width:100%;max-height:250px}.item-bottom{font-size:11px}.wa-tag,.em-tag{font-size:11px;padding:2px 7px}.topbar{font-size:11px}.related-grid{grid-template-columns:1fr}.vote-bar button{font-size:12px;padding:5px 10px}}\n' +
+        '@media(max-width:700px){.header-inner{flex-direction:column;gap:6px;text-align:center}.menu-btn{display:block}.site-nav{position:relative}.site-nav ul{display:none;flex-direction:column;background:#2c3e50;position:absolute;top:100%;left:0;right:0;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,.3)}.site-nav ul.open{display:flex}.site-nav a{padding:12px 16px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.05)}.menu-close{display:block;text-align:right;padding:8px 16px;color:#95a5a6;font-size:12px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.1)}.item{padding:10px}.item-img{max-width:100%;max-height:250px}.item-bottom{font-size:11px}.wa-tag,.em-tag{font-size:11px;padding:2px 7px}.topbar{font-size:10px}.related-grid{grid-template-columns:1fr}.vote-bar button{font-size:12px;padding:5px 10px}}\n' +
         '</style>\n' +
         '<script type="application/ld+json">\n' +
         JSON.stringify({
@@ -189,11 +192,15 @@ function buildAdPage(ad, relatedAds) {
         '<button class="theme-toggle" onclick="toggleDark()" id="darkBtn">&#9789; Tume</button>' +
         '</div></div>\n' +
 
+        '<div class="sticky-wrap">' +
         '<header class="site-header"><div class="wrap header-inner">' +
         '<a href="/" style="text-decoration:none"><div class="logo">Seksi<span>Kuulutused</span>.com<small>Tasuta seksikuulutused &amp; kontaktid Eestis</small></div></a>' +
         '</div></header>\n' +
 
-        '<nav class="site-nav"><div class="wrap"><ul>' +
+        '<nav class="site-nav"><div class="wrap">' +
+        '<button class="menu-btn" onclick="var u=this.parentNode.querySelector(\'ul\');u.classList.toggle(\'open\')">&#9776; Men\u00fc\u00fc</button>' +
+        '<ul>' +
+        '<li class="menu-close" onclick="this.parentNode.classList.remove(\'open\')">&times; Sulge</li>' +
         '<li><a href="/">Kuulutused</a></li>' +
         '<li><a href="/mees-otsib-seksi.html">Mees otsib seksi</a></li>' +
         '<li><a href="/naine-pakub-seksi.html">Naine pakub seksi</a></li>' +
@@ -201,7 +208,8 @@ function buildAdPage(ad, relatedAds) {
         '<li><a href="/naised-omavahel.html">Naised omavahel</a></li>' +
         '<li><a href="/massaaz.html">Massaa\u017e</a></li>' +
         '<li><a href="/lisa-kuulutus.html">Lisa kuulutus</a></li>' +
-        '</ul></div></nav>\n' +
+        '</ul></div></nav>' +
+        '</div>\n' +
 
         '<div class="wrap">\n' +
         '<div class="breadcrumb"><a href="/">Avaleht</a> &rsaquo; <a href="/">Kuulutused</a> &rsaquo; ' + nick + ', ' + age + '</div>\n' +
@@ -220,7 +228,6 @@ function buildAdPage(ad, relatedAds) {
         (prefHtml ? '<div style="margin-bottom:6px;line-height:1.8">' + prefHtml + '</div>' : '') +
         '<div class="item-bottom">' + contactHtml +
         '<span class="type-tag">' + typeLabel + '</span>' +
-        '<span class="views-tag">&#128065; ' + (ad.views || 0) + '</span>' +
         '</div></div>\n' +
 
         '<div class="vote-bar" style="display:flex;gap:10px;margin:12px 0;align-items:center">' +
@@ -234,6 +241,15 @@ function buildAdPage(ad, relatedAds) {
 
         '<a href="/" class="back-link">&larr; Kõik kuulutused</a> &nbsp; ' +
         '<a href="/lisa-kuulutus.html" class="back-link" style="background:#2c3e50">Lisa tasuta kuulutus</a>\n' +
+
+        '<div class="comments-section" style="margin:24px 0">' +
+        '<h3 style="font-size:15px;margin-bottom:12px;color:#2c3e50">Kommentaarid</h3>' +
+        '<div id="commentsList"><div style="color:#95a5a6;font-size:12px">Kommentaaride laadimine...</div></div>' +
+        '<div style="margin-top:12px;background:#fff;border:1px solid #ddd;border-radius:3px;padding:12px">' +
+        '<input type="text" id="cmtName" placeholder="Nimi (valikuline)" maxlength="30" style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:3px;font-family:inherit;font-size:13px;margin-bottom:8px">' +
+        '<textarea id="cmtText" placeholder="Kirjuta kommentaar..." maxlength="500" rows="3" style="width:100%;padding:8px 10px;border:1px solid #ccc;border-radius:3px;font-family:inherit;font-size:13px;resize:vertical"></textarea>' +
+        '<button onclick="postComment()" style="margin-top:8px;padding:8px 20px;background:#27ae60;color:#fff;border:none;border-radius:3px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer">Saada</button>' +
+        '</div></div>\n' +
 
         buildRelatedHtml(relatedAds) +
 
@@ -265,6 +281,10 @@ function buildAdPage(ad, relatedAds) {
         'var voted=JSON.parse(localStorage.getItem("sk_votes")||"{}");\n' +
         'if(voted[' + ad.id + ']){document.getElementById(voted[' + ad.id + ']==="like"?"likeBtn":"dislikeBtn").style.background=voted[' + ad.id + ']==="like"?"#e8f5e9":"#fce4ec";document.getElementById("likeBtn").disabled=true;document.getElementById("dislikeBtn").disabled=true}\n' +
         'function vote(type){if(voted[' + ad.id + '])return;fetch("/.netlify/functions/vote",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({adId:' + ad.id + ',type:type})}).then(function(r){return r.json()}).then(function(d){if(d.likes!==undefined){document.getElementById("likeCnt").textContent=d.likes;document.getElementById("dislikeCnt").textContent=d.dislikes;voted[' + ad.id + ']=type;localStorage.setItem("sk_votes",JSON.stringify(voted));document.getElementById(type==="like"?"likeBtn":"dislikeBtn").style.background=type==="like"?"#e8f5e9":"#fce4ec";document.getElementById("likeBtn").disabled=true;document.getElementById("dislikeBtn").disabled=true;toast(type==="like"?"T\\u00e4name!":"T\\u00e4name tagasiside eest!")}}).catch(function(){toast("Viga")})}\n' +
+        'function escH(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML}\n' +
+        'function loadComments(){fetch("/.netlify/functions/comments?adId=' + ad.id + '").then(function(r){return r.json()}).then(function(cmts){var el=document.getElementById("commentsList");if(!cmts.length){el.innerHTML="<div style=\\"color:#95a5a6;font-size:12px\\">Kommentaare pole veel. Ole esimene!</div>";return}el.innerHTML=cmts.map(function(c){var ago="";var m=Math.floor((Date.now()-new Date(c.ts).getTime())/60000);if(m<1)ago="just n\\u00fc\\u00fcd";else if(m<60)ago=m+" min";else if(m<1440)ago=Math.floor(m/60)+"h";else ago=Math.floor(m/1440)+"p";return"<div style=\\"border-bottom:1px solid #eee;padding:8px 0\\"><div style=\\"display:flex;justify-content:space-between;align-items:center\\"><strong style=\\"font-size:13px\\">"+escH(c.name||"Anon\\u00fc\\u00fcmne")+"</strong><span style=\\"font-size:11px;color:#bdc3c7\\">"+ago+"</span></div><div style=\\"font-size:13px;color:#555;margin-top:4px\\">"+escH(c.text)+"</div></div>"}).join("")}).catch(function(){document.getElementById("commentsList").innerHTML="<div style=\\"color:#e74c3c;font-size:12px\\">Viga laadimisel</div>"})}\n' +
+        'function postComment(){var n=document.getElementById("cmtName").value.trim();var t=document.getElementById("cmtText").value.trim();if(!t){toast("Kirjuta kommentaar!");return}fetch("/.netlify/functions/comments",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({adId:' + ad.id + ',name:n||"Anon\\u00fc\\u00fcmne",text:t})}).then(function(r){return r.json()}).then(function(d){if(d.ok){document.getElementById("cmtText").value="";toast("Kommentaar lisatud!");loadComments()}else{toast(d.error||"Viga")}}).catch(function(){toast("Viga")})}\n' +
+        'loadComments();\n' +
         '</script>\n' +
 
         '</body>\n</html>';
