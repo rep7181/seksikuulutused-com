@@ -504,8 +504,8 @@
             var prefHtml='';
             if(l.acts&&l.acts.length)prefHtml+=l.acts.map(function(a){return'<span class="pref-tag pref-act">'+a+'</span>'}).join('');
             if(l.locs&&l.locs.length)prefHtml+=l.locs.map(function(a){return'<span class="pref-tag pref-loc">'+a+'</span>'}).join('');
-            var adHtml=(idx>0&&idx%5===0?getNativeAd():'');
-            return adHtml+'<div class="item'+(l.vip?' vip-item':'')+'" onclick="if(event.target.closest(\'.wa-tag,.em-tag,.fav-btn,.show-more,.report-lnk\'))return;window.open(\'/kuulutus/'+l.id+'\')">'+(l.vip?'<span class="vip-dot">VIP</span>':'')+
+            var adHtml=(idx===0?getNativeAd()+getNativeAd():(idx%7===0?getNativeAd():''));
+            return adHtml+'<div class="item'+(l.vip?' vip-item':'')+'" onclick="if(event.target.closest(\'.wa-tag,.em-tag,.fav-btn,.show-more,.report-lnk\'))return;window.location.href=\'/kuulutus/'+l.id+'\'">'+(l.vip?'<span class="vip-dot">VIP</span>':'')+
                 '<div class="item-head"><a href="/kuulutus/'+l.id+'" class="item-who" style="color:inherit;text-decoration:none">'+(l.nick||'Anon\u00fc\u00fcmne')+', '+l.age+'</a><div class="item-actions"><button class="fav-btn'+(lk?' liked':'')+'" onclick="togFav(\''+l.wa.replace(/'/g,"\\'")+'\','+l.age+',\''+(l.ct||'').replace(/'/g,"\\'")+'\')">'+
                 (lk?'&#9829;':'&#9825;')+'</button><span class="item-time" title="'+fmtT(l.ts)+'">'+relT(l.ts)+'</span>'+(isNew?'<span class="new-dot">UUS</span>':'')+'</div></div>'+
                 '<div class="item-meta">'+((l.ct&&l.ct.trim())?l.ct.trim()+', ':'')+l.rk+(l.height?' &middot; '+l.height+' cm':'')+(l.weight?' &middot; '+l.weight+' kg':'')+'</div>'+
