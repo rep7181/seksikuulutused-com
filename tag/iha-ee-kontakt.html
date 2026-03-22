@@ -136,11 +136,11 @@ a{color:#2980b9;text-decoration:none}a:hover{text-decoration:underline}
 
             <div class="native-card" style="padding-top:28px">
                 <span class="native-badge">VIP</span>
-                <a href="https://luxegrante.com/#/adv/LCZ45488" target="_blank" rel="noopener"><img class="ad-img" src="https://mahajataha.com/upload/img_625339.jpeg" alt="Kyara" loading="lazy" onerror="this.style.display='none'"></a>
-                <a href="https://luxegrante.com/#/adv/LCZ45488" target="_blank" rel="noopener" style="color:inherit;text-decoration:none"><div class="ad-head">Kyara, 24</div></a>
+                <a href="https://luxegrante.com/#/adv/LCZ45488" rel="noopener"><img class="ad-img" src="https://mahajataha.com/upload/img_625339.jpeg" alt="Kyara" loading="lazy" onerror="this.style.display='none'"></a>
+                <a href="https://luxegrante.com/#/adv/LCZ45488" rel="noopener" style="color:inherit;text-decoration:none"><div class="ad-head">Kyara, 24</div></a>
                 <div class="ad-meta">Tallinn &middot; <span class="type-tag">Naine pakub seksi</span></div>
                 <div class="ad-desc">Ilus ja seksikas neiu Tallinnast pakub unustamatut kogemust.</div>
-                <div style="margin-top:8px"><a href="https://luxegrante.com/#/adv/LCZ45488" target="_blank" rel="noopener" class="wa-tag" style="text-decoration:none">Vaata profiili &nearr;</a></div>
+                <div style="margin-top:8px"><a href="https://luxegrante.com/#/adv/LCZ45488" rel="noopener" class="wa-tag" style="text-decoration:none">Vaata profiili &nearr;</a></div>
             </div>
 
             <div id="adsList"><div class="empty-msg">Kuulutuste laadimine...</div></div>
@@ -199,7 +199,7 @@ a{color:#2980b9;text-decoration:none}a:hover{text-decoration:underline}
             var imgHtml=a.img?'<a href="/kuulutus/'+a.id+'"><img src="'+esc(a.img)+'" alt="" class="ad-img" loading="lazy" onerror="this.style.display=\'none\'"></a>':'';
             var waHtml=a.wa?'<span class="wa-tag blurred" data-v="'+a.wa+'" onclick="rvl(this)">Tel: '+a.wa.substring(0,7)+'<span class="wa-hidden"> ** **</span></span>':'';
             var emHtml=a.em?'<span class="em-tag blurred" data-v="'+a.em+'" onclick="rvl(this)">'+a.em.substring(0,3)+'<span class="em-hidden">*****</span></span>':'';
-            return'<div class="ad-card" style="cursor:pointer" onclick="if(event.target.closest('.wa-tag,.em-tag'))return;window.open('/kuulutus/'+a.id,'_blank')">'+imgHtml+'<a href="/kuulutus/'+a.id+'" style="color:inherit;text-decoration:none"><div class="ad-head">'+esc(a.nick||'Anon\u00fc\u00fcmne')+', '+a.age+'</div></a><div class="ad-meta">'+esc(a.ct||'')+((a.ct&&a.rk)?', ':'')+esc(a.rk||'')+(tl?' &middot; <span class="type-tag">'+tl+'</span>':'')+'</div><div class="ad-desc">'+esc((a.d||'').substring(0,200))+(a.d&&a.d.length>200?'...':'')+'</div>'+(tags?'<div class="ad-tags" style="margin-top:4px">'+tags+'</div>':'')+'<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">'+waHtml+emHtml+'<a href="/kuulutus/'+a.id+'" style="color:#2980b9;font-size:13px;font-weight:700;margin-left:auto">Vaata &rarr;</a></div></div>'
+            return'<div class="ad-card" style="cursor:pointer" onclick="if(event.target.closest('.wa-tag,.em-tag'))return;window.open('/kuulutus/'+a.id,'_self')">'+imgHtml+'<a href="/kuulutus/'+a.id+'" style="color:inherit;text-decoration:none"><div class="ad-head">'+esc(a.nick||'Anon\u00fc\u00fcmne')+', '+a.age+'</div></a><div class="ad-meta">'+esc(a.ct||'')+((a.ct&&a.rk)?', ':'')+esc(a.rk||'')+(tl?' &middot; <span class="type-tag">'+tl+'</span>':'')+'</div><div class="ad-desc">'+esc((a.d||'').substring(0,200))+(a.d&&a.d.length>200?'...':'')+'</div>'+(tags?'<div class="ad-tags" style="margin-top:4px">'+tags+'</div>':'')+'<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">'+waHtml+emHtml+'<a href="/kuulutus/'+a.id+'" style="color:#2980b9;font-size:13px;font-weight:700;margin-left:auto">Vaata &rarr;</a></div></div>'
         }).join('');
     }).catch(function(e){document.getElementById('adsList').innerHTML='<div class="empty-msg">Viga laadimisel.</div>'});
     </script>
